@@ -1,0 +1,22 @@
+.imagem-fullscreen {
+    background-image: url('../assets/img/test-home.png');
+    object-fit: cover; /* Mantém a proporção da imagem e preenche a tela */
+    background-position: center;
+    background-repeat: no-repeat; /* Evita que a imagem seja repetida */
+    height: 100vh; /* Ajuste a altura para cobrir toda a tela */
+}
+
+div p {
+    color: black;
+}
+
+
+.text-sobre {
+    padding: 0 240px; /* Adiciona preenchimento nas laterais */
+}
+
+@media (max-width: 768px) {
+    .imagem-fullscreen {
+        height: calc(100vh - 100px); /* Ajuste conforme necessário */
+    }
+}

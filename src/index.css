@@ -1,6 +1,10 @@
 body {
     font-family: 'Circular Sd', sans-serif;
-    height: 100vh;
     padding: 0;
     margin: 0;
+    height: 100vh;
+}
+
+:root {
+    --cor-primaria: #111c55;
 }
