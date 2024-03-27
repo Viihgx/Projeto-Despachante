@@ -3,7 +3,7 @@
     position: fixed; /* Mantém o cabeçalho fixo no topo da página */
     width: 100%; /* Faz com que o cabeçalho ocupe toda a largura da página */
     z-index: 1000; /* Garante que o cabeçalho fique acima do conteúdo */
-    color: white;
+    color: var(--cor-texto);
     height: 70px;
     width: 100%;
     display: flex;
@@ -11,7 +11,7 @@
     justify-content: space-between;
 }
 
-h1 {
+.header-title {
     font-family: 'Galada', cursive;
     margin-right: 0; /* Removido para evitar deslocamento desnecessário */
 }
@@ -39,7 +39,7 @@ h1 {
 }
 
 .header nav ul li a {
-    color: white;
+    color: var(--cor-texto);
     text-decoration: none;
     transition: color 0.3s ease;
 }

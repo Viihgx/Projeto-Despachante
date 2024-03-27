@@ -5,9 +5,17 @@ function Home() {
     return (
        <div className='container-main'>
          <Header />
-         <div className="imagem-fullscreen"></div>
+         <div className="imagem-fullscreen">
+         </div>
+            <div className="container-img-text">
+               <div className='text-main'>
+                  <div className="texto-superior">Conecte. Simplifique. Confie.</div>
+                  <div className="texto-sobreposicao">Facilitando o caminho dos seus documentos</div>
+               </div>
+            </div>
+
          <div className='text-sobre'>
-            <h3>Sobre a Empresa</h3>
+            <h4>Sobre a Empresa</h4>
             <p>O projeto de despachante é uma iniciativa liderada por um experiente profissional com 57 anos de idade e 35 anos de experiência como despachante. Com vasto conhecimento e expertise no ramo, esse despachante oferece uma ampla gama de serviços relacionados à documentação e trâmites burocráticos.
 Com uma carreira de sucesso, o despachante possui um profundo entendimento dos procedimentos legais e administrativos necessários para lidar com questões como transferência de veículos, obtenção de licenças, regularização de documentos e outras demandas relacionadas.
 Além de seu extenso conhecimento, o despachante valoriza a comunicação clara e eficiente com os clientes. Ele se esforça para explicar os detalhes de cada etapa do processo, garantindo que os clientes compreendam plenamente o que está acontecendo e se sintam confortáveis durante todo o procedimento.

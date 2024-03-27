@@ -41,7 +41,7 @@
     padding: 10px;
     border: none;
     border-radius: 2px;
-    background: linear-gradient(90deg, rgba(255,186,46,1) 49%, rgba(255,216,124,1) 100%);
+    background: var(--cor-secundaria);
     color: white;
     cursor: pointer;
   }
