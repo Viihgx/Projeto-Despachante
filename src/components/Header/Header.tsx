@@ -1,11 +1,12 @@
 import './Header.css';
 import Button from '@mui/material/Button';
+import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 
 function Header() {
   return (
-    <header className="header">
+    <header className="Header">
       <div style={{ flexShrink: 0 }}>
-        <h1 className="header-title">Despacha+</h1>
+        <h1 className="title-logo">Despacha+</h1>
       </div>
       <nav className='nav-bar'>
         <ul>
@@ -27,6 +28,7 @@ function Header() {
         }} variant="contained">
         Solicitar
       </Button>
+      <PersonOutlineOutlinedIcon />
       </nav>
     </header>
   );

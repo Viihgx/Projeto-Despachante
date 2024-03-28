@@ -8,6 +8,7 @@
     width: 100%; 
     /* height: auto; */
     background-size: cover; 
+    margin-bottom: 5rem;
 }
 
 .container-img-text {
@@ -63,13 +64,14 @@
     padding: 0 20%;
 }
 
-.text-sobre h4 {
+.text-sobre .text-title {
     color: var(--cor-primaria);
     font-size: 2rem;
     font-weight: 600;
+    margin: 0;
 }
 
-.text-sobre p {
+.text-sobre .text-p {
     color: #666C89;
 }
 

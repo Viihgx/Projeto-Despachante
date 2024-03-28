@@ -1,56 +1,57 @@
-.header {
-    background-color: transparent; /* Define o cabeçalho como transparente */
-    position: fixed; /* Mantém o cabeçalho fixo no topo da página */
-    width: 100%; /* Faz com que o cabeçalho ocupe toda a largura da página */
-    z-index: 1000; /* Garante que o cabeçalho fique acima do conteúdo */
+.Header {
+    backdrop-filter: blur(8px); /* Aplica o efeito de desfoque */
+    background-color: rgba(17, 28, 85, 0.2);
+    position: fixed; 
+    width: 100%; 
+    z-index: 1000; 
     color: var(--cor-texto);
     height: 70px;
-    width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
-.header-title {
-    font-family: 'Galada', cursive;
-    margin-right: 0; /* Removido para evitar deslocamento desnecessário */
+.title-logo {
+    font-family: 'Galada', cursive; 
+    margin-left: 7rem;
 }
 
-.nav-bar {
+nav {
+    gap: 42px;
     display: flex;
-    justify-content: center;
-    width: 100%;
+    align-items: center;  
+    margin-right: 5rem;
 }
 
-.header nav ul {
+
+.Header nav ul {
     list-style: none;
-    margin: 0 auto;
+    margin: 0;
     padding: 0;
     display: flex;
-    justify-content: center;
 }
 
-.header nav ul li {
-    margin-right: 20px;
+.Header nav ul li {
+    margin-right: 3rem;
 }
 
-.header nav ul li:last-child {
+.Header nav ul li:last-child {
     margin-right: 0;
 }
 
-.header nav ul li a {
+li a {
     color: var(--cor-texto);
     text-decoration: none;
     transition: color 0.3s ease;
 }
 
-.header nav ul li a:hover {
-    color: #f0f0f0;
+ul li a:hover {
+    color: #a52222;
 }
 
 /* Media queries para responsividade */
 @media (max-width: 768px) {
-    .header {
+    .Header {
         flex-direction: column;
         padding: 10px;
     }
@@ -59,18 +60,17 @@
         margin-right: 0; /* Removido para ajustar ao layout de coluna */
     }
 
-    .header nav ul {
+    .Header nav ul {
         flex-direction: column;
         align-items: center;
     }
 
-    .header nav ul li {
+    .Header nav ul li {
         margin-right: 0; /* Removido para ajustar ao layout de coluna */
         margin-bottom: 10px; /* Espaçamento entre os itens do menu */
     }
 
-    .header nav ul li:last-child {
+    .Header nav ul li:last-child {
         margin-bottom: 0; 
     }
 }
-
