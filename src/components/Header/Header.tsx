@@ -1,6 +1,7 @@
 import './Header.css';
 import Button from '@mui/material/Button';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
+import { Link } from 'react-router-dom';
 
 function Header() {
   return (
@@ -28,7 +29,11 @@ function Header() {
         }} variant="contained">
         Solicitar
       </Button>
+
+      <Link to="/" style={{textDecoration: 'none', textTransform: 'none', color: 'white'}}>
       <PersonOutlineOutlinedIcon />
+      </Link>
+
       </nav>
     </header>
   );
