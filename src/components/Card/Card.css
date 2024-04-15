@@ -1,0 +1,56 @@
+/* * {
+  box-sizing: border-box;
+} */
+
+.container-cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around; /* Isso irá distribuir os cards uniformemente */
+  gap: 20px; /* Espaço entre os cards */
+  margin-top: 40px;
+}
+
+img {
+  width: 45px;
+}
+
+.card {
+  flex: 1 1 140px;
+  padding: 10px 20px;
+  backdrop-filter: blur(6px);
+  border-radius: 20px;
+  border: 2px solid rgb(255 255 255 / 13%);
+  color: rgba(255, 255, 255, 0.9);
+  background-color: rgba(255, 255, 255, 0.06);
+  box-shadow: 20px 20px 22px rgb(0 0 0/20%);
+  height: 270px;
+  max-width: 220px;
+}
+
+.card-title {
+  font-weight: 700;
+  color: var(--cor-primaria);
+}
+
+.card-text {
+  font-weight: 400;
+  color: var(--cor-primaria);
+}
+
+.circle {
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  background: var(--cor-primaria);
+  transform: translateY(-32px);
+  border-radius: 50%;
+  /* box-shadow: #2100e2db 0px 28px 71px 8px; */
+}
+
+.circle img {
+  font-size: 25px;
+  font-weight: 700;
+}

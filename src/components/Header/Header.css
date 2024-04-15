@@ -1,3 +1,13 @@
+.Header.visible {
+    top: 0;
+    transition: top 0.3s; /* Adiciona uma transição suave */
+  }
+  
+  .Header.hidden {
+    top: -70px; /* Move o header para cima para ocultá-lo */
+    transition: top 0.3s; /* Adiciona uma transição suave */
+  }
+
 .Header {
     backdrop-filter: blur(8px); /* Aplica o efeito de desfoque */
     background-color: rgba(17, 28, 85, 0.2);
@@ -33,10 +43,28 @@ nav {
 
 .Header nav ul li {
     margin-right: 3rem;
+    position: relative;
 }
 
 .Header nav ul li:last-child {
     margin-right: 0;
+}
+
+.Menu:hover::before {
+    transform: scaleX(1);
+}
+
+.Menu::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background: #fff;
+    border-radius: 5px;
+    transform: scalex(0);
+    transition: all .5s ease;
+    bottom: -2px;
+    left: 0;
 }
 
 li a {
@@ -45,9 +73,10 @@ li a {
     transition: color 0.3s ease;
 }
 
-ul li a:hover {
+/* Não há necessidade */
+/* ul li a:hover {
     color: #a52222;
-}
+} */
 
 /* Media queries para responsividade */
 @media (max-width: 768px) {

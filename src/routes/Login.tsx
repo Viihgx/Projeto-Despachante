@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import './Login.css';
 
 function Login() {
@@ -14,7 +15,9 @@ function Login() {
           Entrar
         </button>
         <p>Esqueceu a Senha?</p>
+        <Link to='/Cadastro'>
         <p>Criar Conta</p>
+        </Link>
       </form>
     </div>
   );

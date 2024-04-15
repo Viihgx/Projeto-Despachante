@@ -28,4 +28,24 @@ body {
 
     /* Font */
 
+    .btn-primario {
+        /* Botão */
+        border-radius: 2.7rem; 
+        background: var(--cor-secundaria); 
+        color: var(--cor-texto); 
+        font-size: 13px; 
+        font-weight: 550; 
+        border: 0.5px solid #fff;
+        line-height: 1.5; 
+        padding: 10px 20px; 
+        cursor: pointer; 
+    
+        /* Transição suave ao passar o mouse */
+        transition: background 0.3s ease;
+    }
+    
+    .btn-primario:hover {
+        background: var(--cor-primaria); /* cor de fundo ao passar o mouse AZULL */
+    }
+
 }

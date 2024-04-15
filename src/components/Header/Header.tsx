@@ -1,38 +1,61 @@
+import { useState, useEffect } from 'react';
 import './Header.css';
 import Button from '@mui/material/Button';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import { Link } from 'react-router-dom';
 
 function Header() {
+  const [prevScrollPos, setPrevScrollPos] = useState(window.pageYOffset);
+  const [visible, setVisible] = useState(true);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollPos = window.pageYOffset;
+      setVisible(prevScrollPos > currentScrollPos || currentScrollPos === 0);
+      setPrevScrollPos(currentScrollPos);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [prevScrollPos]);
+
   return (
-    <header className="Header">
+    <header className={`Header ${visible ? 'visible' : 'hidden'}`}>
       <div style={{ flexShrink: 0 }}>
         <h1 className="title-logo">Despacha+</h1>
       </div>
       <nav className='nav-bar'>
         <ul>
-          <li><a href="#">Home</a></li>
-          <li><a href="#">Orçamento</a></li>
-          <li><a href="#">Serviço</a></li>
+          <li>
+            <a href="#" className="Menu">Home</a>
+          </li>
+          <li>
+            <a href="#" className="Menu">Orçamento</a>
+          </li>
+          <li>
+            <a href="#" className="Menu">Serviço</a>
+          </li>
         </ul>
-      <Button sx={{
-        borderRadius: '2.7rem', 
-        background: 'var(--cor-secundaria)',
-        color: 'color: rgba(17, 17, 17, 1)',
-        fontSize: '13px',
-        fontWeight: '550',
-        border: '.5px solid #fff',
-        lineHeight: '1.5',
-        '&:hover': {
-          background: 'var(--cor-primaria)', 
-        },
+        <Button sx={{
+          borderRadius: '2.7rem',
+          background: 'var(--cor-secundaria)',
+          color: 'color: rgba(17, 17, 17, 1)',
+          fontSize: '13px',
+          fontWeight: '550',
+          border: '.5px solid #fff',
+          lineHeight: '1.5',
+          '&:hover': {
+            background: 'var(--cor-primaria)',
+          },
         }} variant="contained">
-        Solicitar
-      </Button>
+          Solicitar
+        </Button>
 
-      <Link to="/" style={{textDecoration: 'none', textTransform: 'none', color: 'white'}}>
-      <PersonOutlineOutlinedIcon />
-      </Link>
+        <Link to="/" style={{ textDecoration: 'none', textTransform: 'none', color: 'white' }}>
+          <PersonOutlineOutlinedIcon />
+        </Link>
 
       </nav>
     </header>

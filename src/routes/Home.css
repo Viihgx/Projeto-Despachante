@@ -1,6 +1,6 @@
 .imagem-fullscreen {
     position: relative;
-    background-image: url('../assets/img/ImgEditadaHome.png');
+    background-image: url('../assets/img/HomeTestCopia.png');
     /* object-fit: cover; */
     background-position: center;
     background-repeat: no-repeat;
@@ -52,7 +52,7 @@
 }
 
 .texto-sobreposicao {
-    font-size: 3.5rem; 
+    font-size: 3.4rem; 
     /* font-family: 'LOVELO', sans-serif; */
     color: white;
     text-transform: uppercase;
@@ -60,20 +60,50 @@
     text-shadow: 2px 4px 0px rgba(0, 0, 0, 0.2);
 }
 
-.text-sobre {
-    padding: 0 20%;
+.linha-horizontal {
+    margin-bottom: 35px;
 }
 
-.text-sobre .text-title {
+.linha-horizontal hr {
+    width: 20rem;
+    border-color: #ffd26b;
+}
+
+.btn-img {
+    display: flex;
+    justify-content: center;
+}
+
+.container-master {
+    padding: 0 15%;
+}
+
+.text-title {
     color: var(--cor-primaria);
     font-size: 2rem;
     font-weight: 600;
     margin: 0;
 }
 
-.text-sobre .text-p {
+.text-p {
     color: #666C89;
+    text-align: justify;
 }
+
+.img-segunda {
+    width: 100%;
+    height: auto;
+}
+
+.title-container-cards {
+    display: flex;
+    justify-content: center;
+}
+
+.cards-container {
+    background-color: var(--cor-primaria);
+}
+
 
 @media (max-width: 1024px) {
     .texto-superior {
