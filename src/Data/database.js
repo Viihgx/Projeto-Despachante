@@ -29,3 +29,32 @@ async function inserirUsuarioDeTeste() {
 }
 
 inserirUsuarioDeTeste();
+
+async function login(email, senha) {
+    try {
+        // Consulta o banco de dados para verificar se o usuário existe
+        const { data, error } = await supabase
+            .from('Usuarios')
+            .select('*')
+            .eq('Email_usuario', email)
+            .eq('Senha_usuario', senha)
+            .single();
+
+        if (error) {
+            throw new Error(`Erro ao realizar login: ${error.message}`);
+        }
+
+        if (data) {
+            // Usuário encontrado, retorna os dados do usuário
+            return { success: true, usuario: data };
+        } else {
+            // Usuário não encontrado
+            return { success: false, message: 'Email ou senha incorretos' };
+        }
+    } catch (error) {
+        console.error(error);
+        return { success: false, message: 'Erro ao realizar login' };
+    }
+}
+
+export { login };
