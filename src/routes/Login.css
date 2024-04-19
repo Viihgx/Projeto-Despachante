@@ -22,6 +22,7 @@
   
   .login-input {
     background-color: transparent;
+    color: var(--cor-texto);
     margin-bottom: 10px;
     width: 88%;
     height: 3.2rem;
@@ -54,4 +55,3 @@ h2 {
 p {
   color: #fff;
 }
-  

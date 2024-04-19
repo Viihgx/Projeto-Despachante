@@ -48,8 +48,8 @@ function Login() {
                     Entrar
                 </button>
                 <p>Esqueceu a Senha?</p>
-                <Link to='/Cadastro'>
-                    <p>Criar Conta</p>
+                <Link to='/Cadastro' style={{ textDecoration: 'none' }}>
+                  <p>Criar Conta</p>
                 </Link>
             </form>
         </div>
