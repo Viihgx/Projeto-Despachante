@@ -4,7 +4,6 @@ import imageApple from '../../assets/img/IconApple.png';
 import imageEmail from '../../assets/img/IconEmail.png';
 import { cadastrarUsuario } from '../../Data/database';
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom'; // Importando useHistory para redirecionar
 
 
 function Cadastro() {
@@ -12,7 +11,7 @@ function Cadastro() {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [setErrorMessage] = useState('');
-  const history = useHistory(); // Inicializando o useHistory
+  // const history = useHistory(); // Inicializando o useHistory
 
   const handleCadastro = async () => {
     // Verifica se os campos obrigatórios foram preenchidos
@@ -33,11 +32,12 @@ function Cadastro() {
     if (success) {
       // Redireciona para a página de sucesso ou faz outra ação
       console.log('Usuário cadastrado com sucesso!');
-      history.push('/'); // Redireciona para a página inicial ("/Home")
-  } else {
+      // Aqui você pode redirecionar para a página de sucesso
+      window.location.href = '/';
+    } else {
       setErrorMessage(message);
-  }
-};
+    }
+  };
 
   return (
     <div className="register-container">
