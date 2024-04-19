@@ -1,5 +1,4 @@
-/* Login.css */
-.login-container {
+.register-container {
     height: 100vh;
     display: flex;
     justify-content: center;
@@ -7,12 +6,12 @@
     padding: 0;
   }
   
-  .login-form {
+  .register-form {
     gap: 0.4rem;
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 450px;
+    height: 500px;
     width: 370px;
     padding: 20px;
     background: #111c55;
@@ -20,7 +19,7 @@
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   }
   
-  .login-input {
+  .register-input {
     background-color: transparent;
     margin-bottom: 10px;
     width: 88%;
@@ -29,6 +28,7 @@
     border: 1px solid #ddd;
     border-radius: 3px;
     box-sizing: border-box;
+    color: #fff;
   }
 
   input::placeholder {
@@ -36,7 +36,7 @@
     padding-left: 7px;
   }
   
-  .login-button {
+  .register-button {
     width: 88%;
     height: 3.2rem;
     padding: 10px;
@@ -47,11 +47,41 @@
     cursor: pointer;
   }
 
-h2 {
-  color: #fff;
+.p-text {
+  color: var(--cor-texto);
+}
+ 
+.container-other-register {
+  width: 89%;
 }
 
-p {
-  color: #fff;
+.register-google, .register-email {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: #fff;
+  color: var(--cor-texto-secundario);
+  padding: 10px;
+  border-radius: 50px;
+  margin-bottom: 13px;
 }
-  
+
+.register-apple{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: #000;
+  color: var(--cor-texto);
+  padding: 11px;
+  border-radius: 50px;
+  margin-bottom: 13px;
+}
+
+.register-email {
+  border: 2px solid var(--cor-texto-secundario);
+}
+
+.icon-google, .icon-apple, .icon-email {
+  width: 24px;
+  margin-right: 50px;
+}

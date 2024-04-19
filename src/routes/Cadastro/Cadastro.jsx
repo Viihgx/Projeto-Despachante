@@ -1,18 +1,22 @@
 // import { Link } from 'react-router-dom';
 
-import './Cadastro';
+import './Cadastro.css';
+import imageGoogle from '../../assets/img/googleIcon.png';
+import imageApple from '../../assets/img/IconApple.png';
+import imageEmail from '../../assets/img/IconEmail.png';
+// import InputRegister from '../../components/input/InputRegister/InputRegister';
 
 function Cadastro() {
 
   return (
-    <div className="login-container">
-      <form className="login-form">
-        <h2>Crie sua conta</h2>
-
-        <input type="name" className="login-input" placeholder="Nome" />
-        <input type="email" className="login-input" placeholder="Email" />
-        <input type="password" className="login-input" placeholder="Senha" />
-        <button type="button" className="login-button" onClick={(() => {
+    <div className="register-container">
+      <div className="register-form">
+        <h2 className='p-text'>Crie sua conta</h2>
+        {/* <InputRegister /> */}
+        <input type="name" className="register-input" placeholder="Nome" />
+        <input type="email" className="register-input" placeholder="Email" />
+        <input type="password" className="register-input" placeholder="Senha" />
+        <button type="button" className="register-button" onClick={(() => {
             window.location.href = '/Home'
           })}>
           Inscrever-se
@@ -20,13 +24,22 @@ function Cadastro() {
         {/* <Link to='/Login'>
         <p>Login</p>
         </Link> */}
-        ou continue com
-        <div>
-        <button className="btn-google" type="button">
-          Registre-se com o Google
-        </button>
+        <p className='p-text'>ou </p>
+        <div className='container-other-register'>
+          <div className="register-google" type="button">
+            <img className='icon-google' src={imageGoogle}></img>
+            Continuar com o Google
+          </div>
+          <div className="register-apple" type="button">
+            <img className='icon-apple' src={imageApple}></img>
+            Continuar com a Apple
+          </div>
+          <div className="register-email" type="button">
+            <img className='icon-email' src={imageEmail}></img>
+            Continuar com a Apple
+          </div>
         </div>
-      </form>
+      </div>
     </div>
   );
 }

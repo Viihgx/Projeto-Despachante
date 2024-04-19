@@ -48,7 +48,7 @@ function Card() {
     {mock.map(({ title, descricao }, index) => (
       <div key={index} className="card">
          <div className="circle">
-          <img src={image} alt={title} />
+          <img className='img-icon-card' src={image} alt={title} />
         </div>
         <div className="card-conteudo">
           <h2 className='card-title'>{title}</h2>
