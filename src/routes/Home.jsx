@@ -35,15 +35,16 @@ function Home() {
                <p className='text-p'>O trabalho do despachante documentalista tem como objetivo auxiliar indivíduos e empresas na regularização de documentos, simplificando processos burocráticos e garantindo a conformidade legal. Por meio de uma abordagem personalizada, eficiente e experiente, o projeto visa facilitar a obtenção e atualização de documentos necessários, evitando problemas legais e proporcionando tranquilidade aos clientes.</p>
                <img className='img-segunda' src={ImgCaminhoesTarde} alt="Caminhões" />
             </div>
+
+         </div>
             <div className='title-container-cards'>
                <h4 className='text-title'>Nossos Serviços</h4>
             </div>
-            <div className="cards-container-main">
-              <Card />
-              
+            <div className="cards-container">
+               <div className="cards-container-main">
+                  <Card />
+               </div>
             </div>
-
-         </div>
       </div>
 
    );

@@ -1,3 +1,8 @@
+.container-master {
+    padding: 0 15%;
+    background-color: transparent;
+}
+
 .imagem-fullscreen {
     position: relative;
     background-image: url('../assets/img/HomeTestCopia.png');
@@ -74,9 +79,6 @@
     justify-content: center;
 }
 
-.container-master {
-    padding: 0 15%;
-}
 
 .text-title {
     color: var(--cor-primaria);
@@ -101,7 +103,18 @@
 }
 
 .cards-container {
-    background-color: var(--cor-primaria);
+    background-color: var(--cor-primaria); 
+    padding: 3rem 0; 
+    max-height: 500px; 
+    padding: 3rem 0;
+}
+
+/* estilo do container principal dos cards  */
+.cards-container-main {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    
 }
 
 

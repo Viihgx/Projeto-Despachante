@@ -29,7 +29,7 @@
 
 .card-title {
   font-weight: 700;
-  color: var(--cor-primaria);
+  color: var(--cor-secundaria);
 }
 
 .card-text {
@@ -44,7 +44,7 @@
   align-items: center;
   justify-content: center;
   margin: auto;
-  background: var(--cor-primaria);
+  background: var(--cor-secundaria);
   transform: translateY(-32px);
   border-radius: 50%;
   /* box-shadow: #2100e2db 0px 28px 71px 8px; */
