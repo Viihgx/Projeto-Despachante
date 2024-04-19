@@ -21,7 +21,7 @@ function Login() {
   //     const response = await login(email, senha);
   //     if (response.success) {
   //       // Login bem-sucedido, redirecionar para a página Home
-  //       window.location.href = '/Home';
+  //       window.location.href = '/';
   //     } else {
   //       // Login falhou, exibir mensagem de erro
   //       setErroLogin('Email ou senha inválidos');
