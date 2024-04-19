@@ -1,55 +1,59 @@
-//import { useState } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-//import { login } from '../Data/database.js'; 
+import { login } from '../Data/database.js'; // Importando a função login
 import './Login.css';
 
 function Login() {
-  // const [email, setEmail] = useState('');
-  // const [senha, setSenha] = useState('');
-  // const [erroLogin, setErroLogin] = useState('');
+    const [email, setEmail] = useState('');
+    const [senha, setSenha] = useState('');
 
-  // const handleEmailChange = (event) => {
-  //   setEmail(event.target.value);
-  // };
+    const handleLogin = async () => {
+        // Verifica se o email e a senha foram preenchidos
+        if (!email || !senha) {
+            alert('Por favor, preencha o email e a senha.');
+            return;
+        }
 
-  // const handleSenhaChange = (event) => {
-  //   setSenha(event.target.value);
-  // };
+        // Chama a função login para validar o usuário
+        const { success, message } = await login(email, senha);
 
-  // const fazerLogin = async () => {
-  //   try {
-  //     const response = await login(email, senha);
-  //     if (response.success) {
-  //       // Login bem-sucedido, redirecionar para a página Home
-  //       window.location.href = '/';
-  //     } else {
-  //       // Login falhou, exibir mensagem de erro
-  //       setErroLogin('Email ou senha inválidos');
-  //     }
-  //   } catch (error) {
-  //     console.error('Erro ao fazer login:', error);
-  //     setErroLogin('Erro ao fazer login');
-  //   }
-  // };
+        if (success) {
+            // Redireciona para a página inicial se o login for bem-sucedido
+            window.location.href = '/Home';
+        } else {
+            // Exibe mensagem de erro se o login falhar
+            alert(message);
+        }
+    };
 
-  return (
-    <div className="login-container">
-      <form className="login-form">
-        <h2>Login</h2>
-        <input type="email" className="login-input" placeholder="Email*" />
-        <input type="password" className="login-input" placeholder="Senha*" />
-        <button type="button" className="login-button" onClick={(() => {
-            window.location.href = '/Home'
-          })}>
-          Entrar
-        </button>
-        <p>Esqueceu a Senha?</p>
-        <Link to='/Cadastro'>
-        <p>Criar Conta</p>
-        </Link>
-      </form>
-    </div>
-  );
+    return (
+        <div className="login-container">
+            <form className="login-form">
+                <h2>Login</h2>
+                <input
+                    type="email"
+                    className="login-input"
+                    placeholder="Email*"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                />
+                <input
+                    type="password"
+                    className="login-input"
+                    placeholder="Senha*"
+                    value={senha}
+                    onChange={(e) => setSenha(e.target.value)}
+                />
+                <button type="button" className="login-button" onClick={handleLogin}>
+                    Entrar
+                </button>
+                <p>Esqueceu a Senha?</p>
+                <Link to='/Cadastro'>
+                    <p>Criar Conta</p>
+                </Link>
+            </form>
+        </div>
+    );
 }
 
 export default Login;
