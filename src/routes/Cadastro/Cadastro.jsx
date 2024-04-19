@@ -1,42 +1,86 @@
-// import { Link } from 'react-router-dom';
-
 import './Cadastro.css';
 import imageGoogle from '../../assets/img/googleIcon.png';
 import imageApple from '../../assets/img/IconApple.png';
 import imageEmail from '../../assets/img/IconEmail.png';
-// import InputRegister from '../../components/input/InputRegister/InputRegister';
+import { cadastrarUsuario } from '../../Data/database';
+import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom'; // Importando useHistory para redirecionar
+
 
 function Cadastro() {
+  const [nome, setNome] = useState('');
+  const [email, setEmail] = useState('');
+  const [senha, setSenha] = useState('');
+  const [setErrorMessage] = useState('');
+  const history = useHistory(); // Inicializando o useHistory
+
+  const handleCadastro = async () => {
+    // Verifica se os campos obrigatórios foram preenchidos
+    if (!nome || !email || !senha) {
+      setErrorMessage('Por favor, preencha todos os campos.');
+      return;
+    }
+
+    // Realiza o cadastro do usuário
+    const usuario = {
+      Nome: nome,
+      Email_usuario: email,
+      Senha_usuario: senha
+    };
+
+    const { success, message } = await cadastrarUsuario(usuario);
+
+    if (success) {
+      // Redireciona para a página de sucesso ou faz outra ação
+      console.log('Usuário cadastrado com sucesso!');
+      history.push('/'); // Redireciona para a página inicial ("/Home")
+  } else {
+      setErrorMessage(message);
+  }
+};
 
   return (
     <div className="register-container">
       <div className="register-form">
         <h2 className='p-text'>Crie sua conta</h2>
-        {/* <InputRegister /> */}
-        <input type="name" className="register-input" placeholder="Nome" />
-        <input type="email" className="register-input" placeholder="Email" />
-        <input type="password" className="register-input" placeholder="Senha" />
-        <button type="button" className="register-button" onClick={(() => {
-            window.location.href = '/Home'
-          })}>
+        <input
+          type="name"
+          className="register-input"
+          placeholder="Nome"
+          value={nome}
+          onChange={(e) => setNome(e.target.value)}
+        />
+        <input
+          type="email"
+          className="register-input"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <input
+          type="password"
+          className="register-input"
+          placeholder="Senha"
+          value={senha}
+          onChange={(e) => setSenha(e.target.value)}
+        />
+        
+        <button type="button" className="register-button" onClick={handleCadastro}>
           Inscrever-se
         </button>
-        {/* <Link to='/Login'>
-        <p>Login</p>
-        </Link> */}
         <p className='p-text'>ou </p>
         <div className='container-other-register'>
           <div className="register-google" type="button">
-            <img className='icon-google' src={imageGoogle}></img>
+            <img className='icon-google' src={imageGoogle} alt="Google Icon" />
             Continuar com o Google
           </div>
           <div className="register-apple" type="button">
-            <img className='icon-apple' src={imageApple}></img>
+            <img className='icon-apple' src={imageApple} alt="Apple Icon" />
             Continuar com a Apple
           </div>
           <div className="register-email" type="button">
-            <img className='icon-email' src={imageEmail}></img>
-            Continuar com a Apple
+            <img className='icon-email' src={imageEmail} alt="Email Icon" />
+            Continuar com o Email
           </div>
         </div>
       </div>
