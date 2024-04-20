@@ -46,7 +46,11 @@
   margin: auto;
   background: var(--cor-secundaria);
   transform: translateY(-32px);
-  border-radius: 50%;
+  border-radius: 50%;  
+
+
+
+  
   /* box-shadow: #2100e2db 0px 28px 71px 8px; */
 }
 
