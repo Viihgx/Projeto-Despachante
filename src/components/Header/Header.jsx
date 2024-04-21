@@ -3,8 +3,15 @@ import './Header.css';
 import Button from '@mui/material/Button';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import { Link } from 'react-router-dom';
+import ServicePopup from '../Service/ServicePopup'; 
 
 function Header() {
+  const [isServicePopupOpen, setIsServicePopupOpen] = useState(false);
+
+  const toggleServicePopup = () => {
+    setIsServicePopupOpen(!isServicePopupOpen);
+  };
+
   const [prevScrollPos, setPrevScrollPos] = useState(window.pageYOffset);
   const [visible, setVisible] = useState(true);
 
@@ -38,7 +45,9 @@ function Header() {
             <a href="#" className="Menu">Serviço</a>
           </li>
         </ul>
-        <Button sx={{
+        <Button 
+        onClick={(e) => { e.preventDefault(); toggleServicePopup(); }}
+        sx={{
           borderRadius: '2.7rem',
           background: 'var(--cor-secundaria)',
           color: 'color: rgba(17, 17, 17, 1)',
@@ -58,6 +67,7 @@ function Header() {
         </Link>
 
       </nav>
+      <ServicePopup isOpen={isServicePopupOpen} toggleModal={toggleServicePopup} />
     </header>
   );
 }

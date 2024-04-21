@@ -72,4 +72,5 @@ async function cadastrarUsuario(usuario) {
     }
 }
 
+
 export { login, cadastrarUsuario, inserirUsuarioDeTeste };
