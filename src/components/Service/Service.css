@@ -54,10 +54,10 @@
 .modal-1-modal {
   max-width: 710px;
   width: 90%;
-  height: 70%;
+  height: 80%;
   margin: auto;
   padding: 20px;
-  background-color: var(--cor-texto-secundario);
+  background-color: var(--cor-texto-white);
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   z-index: 1001;

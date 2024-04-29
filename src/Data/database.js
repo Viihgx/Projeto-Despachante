@@ -4,32 +4,6 @@ const supabaseUrl = 'https://zlzoirfwdhmwmesytvzl.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpsem9pcmZ3ZGhtd21lc3l0dnpsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTA1MzQxOTYsImV4cCI6MjAyNjExMDE5Nn0.QxDTeHLAzf_Re5gIdGo277zutfvxLyamc7xGemWzZ3M';
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-async function inserirUsuarioDeTeste() {
-    try {
-        const { data, error } = await supabase
-            .from('Usuarios')
-            .insert([
-                {
-                    Nome: 'Usuário de Test',
-                    Placa_do_Veiculo: 'AB31234',
-                    Tipo_de_veiculo: 'CarroE',
-                    Plano_adquirido: 'Plano C',
-                    Endereco: 'Endereço de Teste4',
-                }
-            ]);
-
-        if (error) {
-            throw new Error(`Erro ao inserir usuário: ${error.message}`);
-        }
-
-        console.log('Usuário inserido com sucesso:', data);
-        return { success: true, usuario: data };
-    } catch (error) {
-        console.error(error);
-        return { success: false, message: 'Erro ao inserir usuário' };
-    }
-}
-
 async function login(email, senha) {
     try {
         const { data, error } = await supabase
@@ -72,5 +46,39 @@ async function cadastrarUsuario(usuario) {
     }
 }
 
+async function inserirDocumento(id_servico_solicitado, file) {
+    try {
+        // Faz o upload do arquivo para o Supabase Storage
+        const { data: fileData, error: fileError } = await supabase.storage
+            .from('documentos')
+            .upload(`anexos/${file.name}`, file);
 
-export { login, cadastrarUsuario, inserirUsuarioDeTeste };
+        if (fileError) {
+            throw new Error(`Erro ao fazer upload do arquivo: ${fileError.message}`);
+        }
+
+        // Insere os dados do documento na tabela anexosdocumentos
+        const { data, error } = await supabase
+            .from('anexosdocumentos')
+            .insert([
+                {
+                    id_servico_solicitado: id_servico_solicitado,
+                    nome_arquivo: file.name,
+                    caminho_arquivo: fileData.Key,
+                    data_hora_envio: new Date().toISOString()
+                }
+            ]);
+
+        if (error) {
+            throw new Error(`Erro ao inserir documento: ${error.message}`);
+        }
+
+        console.log('Documento inserido com sucesso:', data);
+        return { success: true, documento: data };
+    } catch (error) {
+        console.error(error);
+        return { success: false, message: 'Erro ao inserir documento' };
+    }
+}
+
+export { login, cadastrarUsuario, inserirDocumento };

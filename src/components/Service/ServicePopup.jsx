@@ -2,6 +2,8 @@ import React from "react";
 import PropTypes from "prop-types";
 import './Service.css';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import FileUpload from "../FileUpload/FileUpload";
+import PlanCards from "../PlanCards/PlanCards";
 
 const ServicePopup = ({ isOpen, toggleModal }) => {
   // Esta função será chamada quando o ícone de voltar for clicado
@@ -21,8 +23,7 @@ const ServicePopup = ({ isOpen, toggleModal }) => {
       <div className="modal-1-modal" onClick={handleStopPropagation}>
         <div>
           <ArrowBackIcon className="icon-retornar" sx={{cursor: 'pointer'}} onClick={handleCloseClick} />
-          <h2>Serviço</h2>
-          <h3>Try Hologram today</h3>
+          <h2 className="title-page-service" style={{color: 'black'}}>Serviço</h2>
         </div>
         <form onClick={handleStopPropagation}>
           <div className="textbox">
@@ -34,10 +35,10 @@ const ServicePopup = ({ isOpen, toggleModal }) => {
             <input type="password" placeholder="Password" />
           </div>
           <div>
-          <button  id="btn-enviar-pdf" className='btn-primario'>Enviar arquivo PDF</button>
+          < FileUpload />
           </div>
         </form>
-        <p>sei oq sei oq</p>
+        <PlanCards />
       </div>
     </div>
   );
