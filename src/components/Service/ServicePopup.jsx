@@ -33,6 +33,9 @@ const ServicePopup = ({ isOpen, toggleModal }) => {
             <span className="material-symbols-outlined">senha</span>
             <input type="password" placeholder="Password" />
           </div>
+          <div>
+          <button  id="btn-enviar-pdf" className='btn-primario'>Enviar arquivo PDF</button>
+          </div>
         </form>
         <p>sei oq sei oq</p>
       </div>

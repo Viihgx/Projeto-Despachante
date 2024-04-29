@@ -2,8 +2,15 @@ import './Home.css';
 import Header from '../components/Header/Header';
 import ImgCaminhoesTarde from '../assets/img/ImgCaminhoesTarde.jpg';
 import Card from '../components/Card/Card';
+import ServicePopup from '../components/Service/ServicePopup';
+import React, { useState } from 'react';
 
 function Home() {
+   const [isServicePopupOpen, setIsServicePopupOpen] = useState(false);
+   const toggleServicePopup = () => {
+      setIsServicePopupOpen(!isServicePopupOpen);
+  };
+
    return (
       <div className='container-main'>
          <Header />
@@ -16,7 +23,7 @@ function Home() {
             </div>
             <div className='linha-horizontal'> <hr /> </div>
             <div className='btn-img'>
-               <button className='btn-primario'>Solicitar agora</button>
+               <button className='btn-primario' onClick={(e) => { e.preventDefault(); toggleServicePopup(); }}>Solicitar agora</button>
             </div>
          </div>
          <div className='container-master'>
@@ -45,6 +52,7 @@ function Home() {
                   <Card />
                </div>
             </div>
+            <ServicePopup isOpen={isServicePopupOpen} toggleModal={toggleServicePopup} />
       </div>
 
    );
