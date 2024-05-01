@@ -35,13 +35,19 @@ async function login(email, senha) {
     }
 }
 
+function validarEmail(email) {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
+}
+
 
 
 async function cadastrarUsuario(usuario) {
     try {
-        // Hash da senha antes de inserir no banco de dados
-        const hashedPassword = await bcrypt.hash(usuario.Senha_usuario, 10);
-        usuario.Senha_usuario = hashedPassword;
+        // Verifica se o e-mail fornecido está em um formato válido
+        if (!validarEmail(usuario.Email_usuario)) {
+            throw new Error('Endereço de e-mail inválido');
+        }
 
         const { data, error } = await supabase
             .from('Usuarios')
@@ -55,9 +61,10 @@ async function cadastrarUsuario(usuario) {
         return { success: true, usuario: data };
     } catch (error) {
         console.error(error);
-        return { success: false, message: 'Erro ao cadastrar usuário' };
+        return { success: false, message: error.message };
     }
 }
+
 async function inserirDocumento(id_servico_solicitado, file) {
     try {
         // Faz o upload do arquivo para o Supabase Storage
