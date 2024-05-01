@@ -1,4 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
+import bcrypt from 'bcryptjs';
+
 
 const supabaseUrl = 'https://zlzoirfwdhmwmesytvzl.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpsem9pcmZ3ZGhtd21lc3l0dnpsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTA1MzQxOTYsImV4cCI6MjAyNjExMDE5Nn0.QxDTeHLAzf_Re5gIdGo277zutfvxLyamc7xGemWzZ3M';
@@ -10,7 +12,6 @@ async function login(email, senha) {
             .from('Usuarios')
             .select('*')
             .eq('Email_usuario', email)
-            .eq('Senha_usuario', senha)
             .single();
 
         if (error) {
@@ -18,7 +19,13 @@ async function login(email, senha) {
         }
 
         if (data) {
-            return { success: true, usuario: data };
+            // Comparando a senha fornecida com o hash armazenado
+            const passwordMatch = await bcrypt.compare(senha, data.Senha_usuario);
+            if (passwordMatch) {
+                return { success: true, usuario: data };
+            } else {
+                return { success: false, message: 'Email ou senha incorretos' };
+            }
         } else {
             return { success: false, message: 'Email ou senha incorretos' };
         }
@@ -28,8 +35,14 @@ async function login(email, senha) {
     }
 }
 
+
+
 async function cadastrarUsuario(usuario) {
     try {
+        // Hash da senha antes de inserir no banco de dados
+        const hashedPassword = await bcrypt.hash(usuario.Senha_usuario, 10);
+        usuario.Senha_usuario = hashedPassword;
+
         const { data, error } = await supabase
             .from('Usuarios')
             .insert([usuario]);
@@ -45,7 +58,6 @@ async function cadastrarUsuario(usuario) {
         return { success: false, message: 'Erro ao cadastrar usuário' };
     }
 }
-
 async function inserirDocumento(id_servico_solicitado, file) {
     try {
         // Faz o upload do arquivo para o Supabase Storage
