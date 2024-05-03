@@ -40,17 +40,28 @@ function validarEmail(email) {
     return regex.test(email);
 }
 
-
+function validarSenha(senha) {
+    // Expressão regular para verificar se a senha contém ao menos um caractere maiúsculo,
+    // um caractere especial e pelo menos um número
+    const regexSenha = /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*[0-9]).{8,}$/;
+    return regexSenha.test(senha);
+}
 
 async function cadastrarUsuario(usuario) {
     try {
-        // Hash da senha antes de inserir no banco de dados
-        const hashedPassword = await bcrypt.hash(usuario.Senha_usuario, 10);
-        usuario.Senha_usuario = hashedPassword;
-        
+        // Verifica se o email fornecido é válido
         if (!validarEmail(usuario.Email_usuario)) {
             throw new Error('Endereço de e-mail inválido');
         }
+
+        // Verifica se a senha atende aos critérios
+        if (!validarSenha(usuario.Senha_usuario)) {
+            throw new Error('A senha deve conter ao menos um caractere maiúsculo, um caractere especial e um número.');
+        }
+
+        // Hash da senha antes de inserir no banco de dados
+        const hashedPassword = await bcrypt.hash(usuario.Senha_usuario, 10);
+        usuario.Senha_usuario = hashedPassword;
 
         const { data, error } = await supabase
             .from('Usuarios')
@@ -64,9 +75,10 @@ async function cadastrarUsuario(usuario) {
         return { success: true, usuario: data };
     } catch (error) {
         console.error(error);
-        return { success: false, message: 'Erro ao cadastrar usuário' };
+        return { success: false, message: error.message };
     }
 }
+
 async function inserirDocumento(id_servico_solicitado, file) {
     try {
         // Faz o upload do arquivo para o Supabase Storage
@@ -102,67 +114,22 @@ async function inserirDocumento(id_servico_solicitado, file) {
     }
 }
 
-async function solicitarPrimeiroEmplacamento(id_usuario, documentos) {
+async function cadastrarPagamento(detalhesPagamento) {
     try {
-        // Aqui você processaria os documentos recebidos da mesma forma que no exemplo anterior
-
         const { data, error } = await supabase
-            .from('servicossolicitados')
-            .insert([
-                {
-                    id_usuario: id_usuario,
-                    tipo_servico: 'Primeiro Emplacamento',
-                    forma_pagamento: 'A definir',
-                    status_servico: 'Recebido',
-                    data_solicitacao: new Date().toISOString(),
-                    documentos: documentos
-                }
-            ]);
+            .from('DetalhesPagamento')
+            .insert([detalhesPagamento]);
 
         if (error) {
-            throw new Error(`Erro ao solicitar primeiro emplacamento: ${error.message}`);
+            throw new Error(`Erro ao cadastrar detalhes do pagamento: ${error.message}`);
         }
 
-        console.log('Solicitação de primeiro emplacamento realizada com sucesso:', data);
-        return { success: true, servico: data };
+        console.log('Detalhes do pagamento cadastrados com sucesso:', data);
+        return { success: true, pagamento: data };
     } catch (error) {
         console.error(error);
-        return { success: false, message: 'Erro ao solicitar primeiro emplacamento' };
+        return { success: false, message: 'Erro ao cadastrar detalhes do pagamento' };
     }
 }
 
-// Funções para os outros tipos de serviço seguem o mesmo padrão, com os documentos necessários adequados
-// Vou mostrar apenas a função para solicitar a placa Mercosul como exemplo
-
-async function solicitarPlacaMercosul(id_usuario, documentos) {
-    try {
-        // Aqui você processaria os documentos recebidos da mesma forma que no exemplo anterior
-
-        const { data, error } = await supabase
-            .from('servicossolicitados')
-            .insert([
-                {
-                    id_usuario: id_usuario,
-                    tipo_servico: 'Placa Mercosul',
-                    forma_pagamento: 'A definir',
-                    status_servico: 'Recebido',
-                    data_solicitacao: new Date().toISOString(),
-                    documentos: documentos
-                }
-            ]);
-
-        if (error) {
-            throw new Error(`Erro ao solicitar placa Mercosul: ${error.message}`);
-        }
-
-        console.log('Solicitação de placa Mercosul realizada com sucesso:', data);
-        return { success: true, servico: data };
-    } catch (error) {
-        console.error(error);
-        return { success: false, message: 'Erro ao solicitar placa Mercosul' };
-    }
-}
-
-
-
-export { login, cadastrarUsuario, inserirDocumento, solicitarPrimeiroEmplacamento, solicitarPlacaMercosul };
+export { login, cadastrarUsuario, inserirDocumento, cadastrarPagamento };
