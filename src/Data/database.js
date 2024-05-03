@@ -102,4 +102,67 @@ async function inserirDocumento(id_servico_solicitado, file) {
     }
 }
 
-export { login, cadastrarUsuario, inserirDocumento };
+async function solicitarPrimeiroEmplacamento(id_usuario, documentos) {
+    try {
+        // Aqui você processaria os documentos recebidos da mesma forma que no exemplo anterior
+
+        const { data, error } = await supabase
+            .from('servicossolicitados')
+            .insert([
+                {
+                    id_usuario: id_usuario,
+                    tipo_servico: 'Primeiro Emplacamento',
+                    forma_pagamento: 'A definir',
+                    status_servico: 'Recebido',
+                    data_solicitacao: new Date().toISOString(),
+                    documentos: documentos
+                }
+            ]);
+
+        if (error) {
+            throw new Error(`Erro ao solicitar primeiro emplacamento: ${error.message}`);
+        }
+
+        console.log('Solicitação de primeiro emplacamento realizada com sucesso:', data);
+        return { success: true, servico: data };
+    } catch (error) {
+        console.error(error);
+        return { success: false, message: 'Erro ao solicitar primeiro emplacamento' };
+    }
+}
+
+// Funções para os outros tipos de serviço seguem o mesmo padrão, com os documentos necessários adequados
+// Vou mostrar apenas a função para solicitar a placa Mercosul como exemplo
+
+async function solicitarPlacaMercosul(id_usuario, documentos) {
+    try {
+        // Aqui você processaria os documentos recebidos da mesma forma que no exemplo anterior
+
+        const { data, error } = await supabase
+            .from('servicossolicitados')
+            .insert([
+                {
+                    id_usuario: id_usuario,
+                    tipo_servico: 'Placa Mercosul',
+                    forma_pagamento: 'A definir',
+                    status_servico: 'Recebido',
+                    data_solicitacao: new Date().toISOString(),
+                    documentos: documentos
+                }
+            ]);
+
+        if (error) {
+            throw new Error(`Erro ao solicitar placa Mercosul: ${error.message}`);
+        }
+
+        console.log('Solicitação de placa Mercosul realizada com sucesso:', data);
+        return { success: true, servico: data };
+    } catch (error) {
+        console.error(error);
+        return { success: false, message: 'Erro ao solicitar placa Mercosul' };
+    }
+}
+
+
+
+export { login, cadastrarUsuario, inserirDocumento, solicitarPrimeiroEmplacamento, solicitarPlacaMercosul };
