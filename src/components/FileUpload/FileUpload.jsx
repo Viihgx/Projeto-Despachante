@@ -15,7 +15,7 @@ function FileUpload() {
     };
 
   return (
-    <div className="file-upload" style={{marginBottom:"120px"}}>
+    <div className="file-upload" style={{marginBottom:"100px"}}>
       <input
         type="file"
         accept=".pdf"
