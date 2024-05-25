@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import './Service.css';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -11,33 +11,50 @@ import FileUpload from "../FileUpload/FileUpload";
 import CardService from "../Cards/CardService/CardService";
 import InformationService from "./InformationService";
 import PaymentForm from "./PaymentForm";
-import { cadastrarPagamento } from "../../Data/database";
+import { cadastrarPagamento, cadastrarServicoSolicitado } from "../../Data/database";
 
 const steps = ['Selecionar Serviço', 'Preencher informações', 'Enviar documento', 'Concluir'];
 
-const ServicePopup = ({ isOpen, toggleModal }) => {
+const ServicePopup = ({ isOpen, toggleModal, usuarioId }) => {
   const [activeStep, setActiveStep] = useState(0);
   const [selectedCard, setSelectedCard] = useState(null);
   const [fullName, setFullName] = useState('');
   const [cpf, setCpf] = useState('');
   const [paymentMethod, setPaymentMethod] = useState('');
   const [installments, setInstallments] = useState(1);
+  const [isStepValid, setIsStepValid] = useState(false);
+  const [isFileSelected, setIsFileSelected] = useState(false);
+  const [isPlanSelected, setIsPlanSelected] = useState(false);
+  const [stepData, setStepData] = useState({
+    0: { selectedCard: null }, // Dados da primeira etapa
+    1: { fullName: '', cpf: '', paymentMethod: '', installments: 1 }, // Dados da segunda etapa
+    2: { isFileSelected: false }, // Dados da terceira etapa
+    3: { selectedPlan: null } // Dados da quarta etapa
+  });
+  
 
   const handleCloseClick = () => {
     toggleModal();
     setActiveStep(0);
     setSelectedCard(null);
+    setFullName('');
     setCpf('');
     setPaymentMethod('');
     setInstallments(1);
+    setIsFileSelected(false);
+    setIsPlanSelected(false);
   };
 
   const handleNextStep = () => {
-    setActiveStep((prevStep) => prevStep + 1);
+    if (isStepValid) {
+      setActiveStep((prevStep) => prevStep + 1);
+      validateStep(activeStep + 1);
+    }
   };
 
   const handlePreviousStep = () => {
     setActiveStep((prevStep) => prevStep - 1);
+    validateStep(activeStep - 1);
   };
 
   const handleFinish = async () => {
@@ -48,6 +65,8 @@ const ServicePopup = ({ isOpen, toggleModal }) => {
     setCpf('');
     setPaymentMethod('');
     setInstallments(1);
+    setIsFileSelected(false);
+    setIsPlanSelected(false);
 
     const detalhesPagamento = {
       nomeCompleto: fullName,
@@ -58,17 +77,67 @@ const ServicePopup = ({ isOpen, toggleModal }) => {
     const resultado = await cadastrarPagamento(detalhesPagamento);
     if (resultado.success) {
       console.log("Detalhes do pagamento cadastrados com sucesso!");
-      // Execute ações adicionais, se necessário
+  
     } else {
       console.error("Erro ao cadastrar detalhes do pagamento:", resultado.message);
-      // Trate o erro de acordo com as necessidades do aplicativo
+
     }
   };
 
-  const handleCardSelect = (card) => {
-    console.log("Card selecionado:", card);
+  const handleCardSelect = async (card) => {
     setSelectedCard(card);
+    setStepData((prevData) => ({
+      ...prevData,
+      0: { selectedCard: card }
+    }));
   };
+  
+  const handlePlanSelect = (planId) => {
+    setStepData((prevData) => ({
+      ...prevData,
+      3: { selectedPlan: planId }
+    }));
+  };
+  
+  const handleFileSelect = (file) => {
+    setStepData((prevData) => ({
+      ...prevData,
+      2: { isFileSelected: file !== null }
+    }));
+  };
+  
+  
+
+  const validateStep = (step) => {
+    switch (step) {
+      case 0:
+        setIsStepValid(stepData[0].selectedCard !== null);
+        break;
+      case 1:
+        setIsStepValid(
+          stepData[1].fullName !== '' &&
+          stepData[1].cpf !== '' &&
+          stepData[1].paymentMethod !== ''
+        );
+        break;
+      case 2:
+        setIsStepValid(stepData[2].isFileSelected);
+        break;
+      case 3:
+        setIsStepValid(stepData[3].selectedPlan !== null);
+        break;
+      default:
+        setIsStepValid(true);
+        break;
+    }
+  };
+  
+  
+  useEffect(() => {
+    validateStep(activeStep);
+    console.log("isFileSelected:", isFileSelected); // log para acompanhar o estado isFileSelected
+  }, [selectedCard, fullName, cpf, paymentMethod, isFileSelected]); 
+  
 
   if (!isOpen) return null;
 
@@ -88,14 +157,17 @@ const ServicePopup = ({ isOpen, toggleModal }) => {
             ))}
           </Stepper>
           <div className="popup-content">
+            {/* PRIMEIRA ETAPA */}
             {activeStep === 0 && (
               <div>
                 <CardService onSelect={handleCardSelect} />
               </div>
             )}
+            {/* SEGUNDA ETAPA */}
             {activeStep === 1 && (
-                <InformationService />
+                <InformationService setIsStepValid={setIsStepValid} />
             )}
+            {/* TERCEIRA ETAPA */}
             {activeStep === 2 && (
               <>
                  {selectedCard === "primeiro-emplacamento" && (
@@ -107,7 +179,7 @@ const ServicePopup = ({ isOpen, toggleModal }) => {
                       <li>Cópia da CNH ou identidade.</li>
                       <li>CPF do nome do remetente.</li>
                     </ul>
-                    <FileUpload />
+                    <FileUpload onFileSelect={handleFileSelect} />
                   </div>
                 )}
               </>
@@ -125,7 +197,7 @@ const ServicePopup = ({ isOpen, toggleModal }) => {
                       <li>Recibo de compra e venda (caso a placa for modelo antigo). </li>
                       <li>B.O de perda da placa (caso ela tenha sido extraviada). </li>
                     </ul>
-                   <FileUpload />
+                   <FileUpload onFileSelect={handleFileSelect} />
                  </div>
                 )}
               </>
@@ -142,7 +214,7 @@ const ServicePopup = ({ isOpen, toggleModal }) => {
                     <li>CPF do proprietário do veículo. </li>
                     <li>B.O de perda do CRV. </li>
                   </ul>
-                 <FileUpload />
+                 <FileUpload onFileSelect={handleFileSelect} />
                </div>
                 )}
               </>
@@ -158,14 +230,15 @@ const ServicePopup = ({ isOpen, toggleModal }) => {
                      <li>Cópia da CNH ou identidade .</li>
                      <li>CPF do comprador do veículo. </li>
                    </ul>
-                  <FileUpload />
+                  <FileUpload onFileSelect={handleFileSelect} />
                 </div>
                 )}
               </>
             )}
+            {/* QUARTA ETAPA */}
             {activeStep === 3 && (
               <div>
-                <PlanCards />
+                <PlanCards onSelect={handlePlanSelect}/>
                 <PaymentForm
                   fullName={fullName}
                   setFullName={setFullName}
@@ -179,15 +252,16 @@ const ServicePopup = ({ isOpen, toggleModal }) => {
               </div>
             )}
           </div>
+          {/* NAVEÇÃO / BUTTONS */}
           <div className="steps-navigation">
             {activeStep > 0 && (
               <Button onClick={handlePreviousStep}>Voltar</Button>
             )}
             {activeStep < steps.length - 1 && (
-              <Button onClick={handleNextStep}>Próximo</Button>
+              <Button onClick={handleNextStep} disabled={!isStepValid}>Próximo</Button>
             )}
             {activeStep === steps.length - 1 && (
-              <Button onClick={handleFinish}>Finalizar</Button>
+              <Button onClick={handleFinish} disabled={!isStepValid}>Finalizar</Button>
             )}
           </div>
         </div>

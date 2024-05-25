@@ -5,7 +5,8 @@ import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined
 import ServicePopup from '../Service/ServicePopup'; 
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
+import { logout } from '../../Data/database';
+import { Link } from 'react-router-dom';
 
 function Header() {
 
@@ -22,6 +23,15 @@ function Header() {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleLogout = async () => {
+    const { success, message } = await logout();
+    if (success) {
+      console.log('Logout bem-sucedido');
+    } else {
+      console.error('Erro ao realizar logout:', message);
+    }
   };
 
   const [prevScrollPos, setPrevScrollPos] = useState(window.pageYOffset);
@@ -74,8 +84,8 @@ function Header() {
           Solicitar
         </Button>
 
-        <div style={{cursor: "pointer"}} onClick={handleClick}>
-          <PersonOutlineOutlinedIcon/>
+        <div style={{ cursor: "pointer" }} onClick={handleClick}>
+          <PersonOutlineOutlinedIcon />
         </div>
         <Menu
           anchorEl={anchorEl}
@@ -83,15 +93,10 @@ function Header() {
           onClose={handleClose}
         >
           <MenuItem onClick={handleClose}>Meu Perfil</MenuItem>
-          <MenuItem onClick={handleClose}>Sair</MenuItem>
+          <Link to="/" ><MenuItem onClick={handleLogout}>Sair</MenuItem></Link>
         </Menu>
-
-        {/* <Link to="/" style={{ textDecoration: 'none', textTransform: 'none', color: 'white' }}>
-          <PersonOutlineOutlinedIcon />
-        </Link> */}
-
       </nav>
-      <ServicePopup isOpen={isServicePopupOpen} toggleModal={toggleServicePopup} />
+      {/* <ServicePopup isOpen={true} toggleModal={toggleModal} /> */}
     </header>
   );
 }

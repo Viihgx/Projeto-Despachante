@@ -1,25 +1,3 @@
-// import './Card.css';
-
-// interface CardProps {
-//   title: string;
-//   description: string;
-//   imageUrl: string;
-// }
-
-// const Card: React.FC<CardProps> = ({ title, description, imageUrl }) => {
-//   return (
-//     <div className="card">
-//       <img src={imageUrl} alt="Imagem do Card" className="cardImage" />
-//       <div className="cardContent">
-//         <h3>{title}</h3>
-//         <p>{description}</p>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Card;
-
 import image from '../../assets/img/IconPlacamento.png'
 import './Card.css';
 
@@ -46,9 +24,9 @@ function Card() {
   return (
     <div className='container-cards'>
     {mock.map(({ title, descricao }, index) => (
-      <div key={index} className="card">
+      <div key={index} className="card-home">
          <div className="circle">
-          <img className='img-icon-card' src={image} alt={title} />
+          <img className='img-icon' src={image} alt={title} />
         </div>
         <div className="card-conteudo">
           <h2 className='card-title'>{title}</h2>

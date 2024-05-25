@@ -1,9 +1,12 @@
 import './Home.css';
 import Header from '../components/Header/Header';
-import ImgCaminhoesTarde from '../assets/img/ImgCaminhoesTarde.jpg';
 import Card from '../components/Card/Card';
 import ServicePopup from '../components/Service/ServicePopup';
 import React, { useState } from 'react';
+import ImgCaminhoesTarde from '../assets/img/ImgCaminhoesTarde.jpg';
+import ImgComoTrabalhamos from '../assets/img/comoTrabalhamos.png';
+import ImgBox from '../assets/img/box.png';
+import ImgSecurity from '../assets/img/security.png';
 
 function Home() {
    const [isServicePopupOpen, setIsServicePopupOpen] = useState(false);
@@ -44,14 +47,34 @@ function Home() {
             </div>
 
          </div>
-            <div className='title-container-cards'>
-               <h4 className='text-title'>Nossos Serviços</h4>
-            </div>
             <div className="cards-container">
                <div className="cards-container-main">
+               <h4 className='text-title' style={{color: "#fff"}}>Nossos Serviços</h4>
                   <Card />
                </div>
             </div>
+
+            <div className='container-work'>
+               <div className='container-master'>
+                  <h4 className='text-title'>Como trabalhamos</h4>
+                  <div className='box-main-work'>
+                     <img className='img-como-trabalhamos' src={ImgComoTrabalhamos} alt="Trablho em grupo" />
+                     <div className='box-work-text'>
+                        <img className='img-icon' src={ImgBox} alt="" />
+                        <h3>Especialista em veículos de grande porte</h3>
+                        <p className='text-p'>Ao longo dos últimos 30 anos, buscamos nos especializar na prestação serviços de documentação veicular para frotas de caminhões, carretas, cavalos mecânicos e outros veículos de grande porte.</p>
+                        
+                        <img className='img-icon' src={ImgSecurity} alt="" />
+                        <h3>Atendimento à domicílio</h3>
+                        <p className='text-p'>Já pensou regularizar seu veículo sem sair de casa ou trabalho ?
+   Clique no botão abaixo e conheça nossos serviços.</p>
+
+                        <h3>Segurança Total no Atendimento</h3>
+                        <p className='text-p'>Ganhe mais tempo e tranquilidade para se preocupar com aquilo que realmente importa para você!</p>
+                     </div>
+                  </div>
+               </div>
+            </div>  
             <ServicePopup isOpen={isServicePopupOpen} toggleModal={toggleServicePopup} />
       </div>
 

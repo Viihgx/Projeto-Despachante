@@ -1,5 +1,5 @@
 .container-master {
-    padding: 0 15%;
+    padding: 0 12%;
     background-color: transparent;
 }
 
@@ -103,6 +103,8 @@
 }
 
 .cards-container {
+    display: flex;
+    justify-content: center;
     background-color: var(--cor-primaria); 
     padding: 3rem 0; 
     max-height: 500px; 
@@ -112,10 +114,28 @@
 /* estilo do container principal dos cards  */
 .cards-container-main {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
     justify-content: center;
+    align-items: center;
     
 }
+
+.container-work div{
+    padding: 0 4%!important;
+}
+
+.box-main-work {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 70px;
+}
+
+.box-main-work .img-como-trabalhamos{
+    width: 650px;
+}
+
+
 
 
 @media (max-width: 1024px) {

@@ -3,16 +3,24 @@ import './FileUpload.css';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import CloseIcon from '@mui/icons-material/Close';
 
-function FileUpload() {
+function FileUpload({ onFileSelect }) {
     const [selectedFile, setSelectedFile] = useState(null);
+    const [isFileSelected, setIsFileSelected] = useState(false);
   
     const handleFileChange = (event) => {
-      setSelectedFile(event.target.files[0]);
+      const file = event.target.files[0];
+      setSelectedFile(file);
+      setIsFileSelected(!!file); // Define como verdadeiro se houver um arquivo selecionado
+      onFileSelect(file);
     };
 
     const cancelFileSelection = () => {
       setSelectedFile(null);
+      setIsFileSelected(false); // Define como falso ao cancelar a seleção do arquivo
+      onFileSelect(null);
     };
+
+    console.log("isFileSelected:", isFileSelected); // Adiciona um log para acompanhar o estado isFileSelected
 
   return (
     <div className="file-upload" style={{marginBottom:"100px"}}>

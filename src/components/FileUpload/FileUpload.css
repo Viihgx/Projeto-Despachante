@@ -2,7 +2,7 @@
 .file-upload {
     text-align: center;
     border: 2px dashed gray;
-    height: 92px;
+    height: 130px;
     display: flex;
     flex-direction: column;
     align-items: center;

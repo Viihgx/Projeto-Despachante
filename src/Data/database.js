@@ -5,10 +5,55 @@ const supabaseUrl = 'https://zlzoirfwdhmwmesytvzl.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpsem9pcmZ3ZGhtd21lc3l0dnpsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTA1MzQxOTYsImV4cCI6MjAyNjExMDE5Nn0.QxDTeHLAzf_Re5gIdGo277zutfvxLyamc7xGemWzZ3M';
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-async function getSessionUser() {
+async function isUserLoggedIn() {
     const user = supabase.auth.user();
-    return user;
+    return user !== null;
 }
+
+async function getSessionUserIfLoggedIn() {
+    try {
+        if (await isUserLoggedIn()) {
+            const sessionUser = await getSessionUser();
+            if (sessionUser) {
+                console.log('Usuário está na sessão:', sessionUser.nome); // Mensagem indicando que o usuário está na sessão
+            }
+            return sessionUser;
+        } else {
+            console.log('Usuário não está na sessão'); // Mensagem indicando que o usuário não está na sessão
+            throw new Error('Usuário não autenticado');
+        }
+    } catch (error) {
+        console.error(error);
+        return null;
+    }
+}
+
+async function getSessionUser() {
+    try {
+        const user = supabase.auth.user();
+        if (user) {
+            const { data: userData, error } = await supabase
+                .from('Usuarios')
+                .select('ID', 'Nome', 'Email_usuario') // Include the 'id' field
+                .eq('ID', user.id.toUpperCase())
+                .single();
+            if (error) {
+                throw new Error(`Erro ao buscar informações do usuário: ${error.message}`);
+            }
+            if (userData) {
+                return { ...user, ID: userData.id, nome: userData.Nome, email: userData.Email_usuario }; // Include the 'id' field
+            } else {
+                throw new Error('Informações do usuário não encontradas');
+            }
+        } else {
+            throw new Error('Usuário não autenticado');
+        }
+    } catch (error) {
+        console.error('Erro ao obter o usuário da sessão:', error.message);
+        return null;
+    }
+}
+
 
 async function login(email, senha) {
     try {
@@ -17,27 +62,29 @@ async function login(email, senha) {
             .select('*')
             .eq('Email_usuario', email)
             .single();
-        console.log('Resultado da consulta:', userInfo);
+        
         if (userError) {
             throw new Error(`Erro ao realizar login: ${userError.message}`);
         }
+
         if (userInfo) {
-            const passwordMatch = await bcrypt.compare(senha, userInfo.Senha_usuario);
+            const passwordMatch = await bcrypt.compare(senha, userInfo.Senha_usuario); // Comparar senhas
+            
             if (passwordMatch) {
-                // Adicione a propriedade 'nome' ao objeto usuário
-                const usuarioComNome = { ...userInfo, nome: userInfo.Nome };
-                return { success: true, usuario: usuarioComNome };
+                console.log('Login bem-sucedido'); // Mensagem indicando login bem-sucedido
+                return { success: true };
             } else {
-                return { success: false, message: 'Email ou senha incorretos' };
+                throw new Error('Senha incorreta');
             }
         } else {
-            return { success: false, message: 'Email ou senha incorretos' };
+            throw new Error('Usuário não encontrado');
         }
     } catch (error) {
-        console.error(error);
-        return { success: false, message: 'Erro ao realizar login' };
+        console.error('Erro ao realizar login:', error.message);
+        return { success: false, message: error.message };
     }
 }
+
 
 function validarEmail(email) {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -47,6 +94,21 @@ function validarSenha(senha) {
     const regexSenha = /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*[0-9]).{8,}$/;
     return regexSenha.test(senha);
 }
+
+async function logout() {
+    try {
+        const { error } = await supabase.auth.signOut();
+        if (error) {
+            throw new Error(`Erro ao realizar logout: ${error.message}`);
+        }
+        console.log('Usuário desconectado com sucesso');
+        return { success: true };
+    } catch (error) {
+        console.error(error);
+        return { success: false, message: 'Erro ao realizar logout' };
+    }
+}
+
 async function cadastrarUsuario(usuario) {
     try {
         if (!validarEmail(usuario.Email_usuario)) {
@@ -70,6 +132,28 @@ async function cadastrarUsuario(usuario) {
         return { success: false, message: error.message };
     }
 }
+
+const cadastrarServicoSolicitado = async (tipoServico) => {
+    try {
+      const user = supabase.auth.user();
+      if (!user) {
+        throw new Error('Usuário não autenticado');
+      }
+      
+      const idUsuario = user.id;
+      
+      const insercao = await supabase
+        .from('servissolicitados')
+        .insert([{ id_usuario: idUsuario, tipo_servico: tipoServico }]);
+  
+      return { success: true };
+    } catch (error) {
+      console.error('Erro ao cadastrar serviço solicitado:', error);
+      return { success: false, message: 'Erro ao cadastrar serviço solicitado' };
+    }
+};
+
+
 async function inserirDocumento(id_servico_solicitado, file) {
     try {
         const { data: fileData, error: fileError } = await supabase.storage
@@ -113,4 +197,5 @@ async function cadastrarPagamento(detalhesPagamento) {
         return { success: false, message: 'Erro ao cadastrar detalhes do pagamento' };
     }
 }
-export { login, cadastrarUsuario, inserirDocumento, cadastrarPagamento, getSessionUser };
+
+export { login, cadastrarUsuario, inserirDocumento, cadastrarPagamento, getSessionUser, getSessionUserIfLoggedIn, logout, cadastrarServicoSolicitado };

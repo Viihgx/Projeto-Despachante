@@ -1,12 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import TextField from '@mui/material/TextField';
 import { Typography } from "@mui/material";
-import { Grade } from "@mui/icons-material";
 import { Grid } from "@material-ui/core";
 
-const InformationService = () => {
+const InformationService = ({ setIsStepValid }) => {
     const [fullName, setFullName] = useState('');
-    const [NameVeiculo, setNameVeiculo] = useState('');
+    const [nameVeiculo, setNameVeiculo] = useState('');
     const [cpf, setCPF] = useState('');
     const [licensePlate, setLicensePlate] = useState('');
 
@@ -20,24 +19,22 @@ const InformationService = () => {
 
     const handleCPFChange = (event) => {
         let inputCPF = event.target.value;
-        // Remove qualquer caractere que não seja número
         inputCPF = inputCPF.replace(/\D/g, '');
-        // Limita a quantidade de caracteres para o formato de CPF
         inputCPF = inputCPF.slice(0, 11);
-        // Adiciona os pontos e traço no formato do CPF
         inputCPF = inputCPF.replace(/^(\d{3})(\d{3})(\d{3})(\d{2})$/, '$1.$2.$3-$4');
-        // Atualiza o estado do CPF
         setCPF(inputCPF);
     };
 
     const handleLicensePlateChange = (event) => {
-        // Apenas permite letras, números e traço para a placa
         let inputLicensePlate = event.target.value.replace(/[^a-zA-Z0-9-]/g, '');
-        // Limita a quantidade de caracteres para 8 (placa padrão Mercosul)
         inputLicensePlate = inputLicensePlate.slice(0, 8);
-        // Atualiza o estado da placa
-        setLicensePlate(inputLicensePlate.toUpperCase()); // Transforma em maiúsculas
+        setLicensePlate(inputLicensePlate.toUpperCase());
     };
+
+    useEffect(() => {
+        const isValid = fullName && nameVeiculo && cpf && licensePlate;
+        setIsStepValid(isValid);
+    }, [fullName, nameVeiculo, cpf, licensePlate, setIsStepValid]);
 
     return ( 
         <div style={{marginBottom:"100px"}}>
@@ -73,7 +70,7 @@ const InformationService = () => {
              <Grid item xs={12}>
              <TextField 
                 label="Nome do veiculo" 
-                value={NameVeiculo} 
+                value={nameVeiculo} 
                 onChange={handleNameVeiculoChange} 
                 fullWidth
                 margin="normal" 

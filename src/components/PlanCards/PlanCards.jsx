@@ -1,5 +1,3 @@
-// PlanCards.js
-
 import React, { useState } from 'react';
 import './PlanCards.css';
 

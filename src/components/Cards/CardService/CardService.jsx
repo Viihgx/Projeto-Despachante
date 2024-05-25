@@ -18,7 +18,9 @@ function CardService({ onSelect }) {
         <div id='card1' className={`card-service ${selectedPlan === 'primeiro-emplacamento' ? 'selected' : ''}`} onClick={() => handleSelectPlan('primeiro-emplacamento')}>
           {selectedPlan === 'primeiro-emplacamento' && <div className="selection-indicator"></div>}
           <h2 className="title-service">Primeiro Emplacamento</h2>
-          <p className="description-service">• Nota fiscal da compra <br/> • Cópia da CNH ou identidade <br/>  
+          <p className="description-service">
+          • Nota fiscal da compra <br/> 
+          • Cópia da CNH ou identidade <br/>  
           • CPF do nome do remetente</p>
         </div>
       </Grid>
