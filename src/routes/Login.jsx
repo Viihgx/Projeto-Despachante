@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { login } from '../Data/database.js'; 
+import { Link, useNavigate } from 'react-router-dom'; // Atualize para useNavigate
+import axios from 'axios';
 import './Login.css';
 
 function Login() {
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
+    const [error, setError] = useState('');
+    const navigate = useNavigate(); // Atualize para useNavigate
 
     const handleLogin = async () => {
         // Verifica se o email e a senha foram preenchidos
@@ -14,24 +16,21 @@ function Login() {
             return;
         }
 
-        // Chama a função login para validar o usuário
-        const { success, message } = await login(email, senha);
-
-        if (success) {
-            // Redireciona para a página inicial se o login for bem-sucedido
-            window.location.href = '/Home';
-        } else {
-            // Exibe mensagem de erro se o login falhar
-            alert(message);
+        try {
+            const response = await axios.post('http://localhost:3000/login', { email, senha });
+            const { token } = response.data;
+            localStorage.setItem('token', token);
+            setError('');
+            // Redirecionar para a página Home após o login bem-sucedido
+            navigate('/Home'); // Atualize para navigate
+        } catch (error) {
+            setError('Login falhou. Verifique suas credenciais e tente novamente.');
         }
-
-
-        
     };
 
     return (
         <div className="login-container">
-            <form className="login-form">
+            <form className="login-form" onSubmit={(e) => e.preventDefault()}>
                 <h2>Login</h2>
                 <input
                     type="email"
@@ -47,6 +46,8 @@ function Login() {
                     value={senha}
                     onChange={(e) => setSenha(e.target.value)}
                 />
+                
+                {error && <p style={{ color: 'red' }}>{error}</p>}
                 <button type="button" className="login-button" onClick={handleLogin}>
                     Entrar
                 </button>

@@ -1,17 +1,20 @@
-import './Header.css';
 import { useState, useEffect } from 'react';
-import Button from '@mui/material/Button';
+import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
-import ServicePopup from '../Service/ServicePopup'; 
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import { logout } from '../../Data/database';
-import { Link } from 'react-router-dom';
+import './Header.css';
+// import { logout } from '../../Data/database';
+// import Button from '@mui/material/Button';
+// import ServicePopup from '../Service/ServicePopup'; 
 
-function Header() {
+function Header({ userData }) {
+  const navigate = useNavigate(); // Usando useNavigate para navegação programática
 
-  const [isServicePopupOpen, setIsServicePopupOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [isServicePopupOpen, setIsServicePopupOpen] = useState(false);
 
   const toggleServicePopup = () => {
     setIsServicePopupOpen(!isServicePopupOpen);
@@ -26,11 +29,22 @@ function Header() {
   };
 
   const handleLogout = async () => {
-    const { success, message } = await logout();
-    if (success) {
-      console.log('Logout bem-sucedido');
-    } else {
-      console.error('Erro ao realizar logout:', message);
+    try {
+      const response = await axios.post('http://localhost:3000/logout', null, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+
+      if (response.data.success) {
+        console.log('Logout bem-sucedido');
+        localStorage.removeItem('token');
+        navigate('/'); // Usando navigate para redirecionar para a página de login
+      } else {
+        console.error('Erro ao realizar logout:', response.data.error);
+      }
+    } catch (error) {
+      console.error('Erro ao realizar logout:', error);
     }
   };
 
@@ -67,7 +81,7 @@ function Header() {
             <a href="#" className="Menu">Serviço</a>
           </li>
         </ul>
-        <Button 
+        {/* <Button 
         onClick={(e) => { e.preventDefault(); toggleServicePopup(); }}
         sx={{
           borderRadius: '2.7rem',
@@ -82,8 +96,8 @@ function Header() {
           },
         }} variant="contained">
           Solicitar
-        </Button>
-
+        </Button> */}
+        <span>Olá, {userData.Nome}</span>
         <div style={{ cursor: "pointer" }} onClick={handleClick}>
           <PersonOutlineOutlinedIcon />
         </div>

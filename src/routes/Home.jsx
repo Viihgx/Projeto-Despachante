@@ -1,26 +1,66 @@
+import { useNavigate } from 'react-router-dom'; 
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import './Home.css';
 import Header from '../components/Header/Header';
 import Card from '../components/Card/Card';
 import ServicePopup from '../components/Service/ServicePopup';
-import React, { useState } from 'react';
 import ImgCaminhoesTarde from '../assets/img/ImgCaminhoesTarde.jpg';
 import ImgComoTrabalhamos from '../assets/img/comoTrabalhamos.png';
 import ImgBox from '../assets/img/box.png';
 import ImgSecurity from '../assets/img/security.png';
 
 function Home() {
+   const [data, setData] = useState(null);
+   const [userData, setUserData] = useState(null); // Adicionando estado para userData
+   const navigate = useNavigate();
+ 
    const [isServicePopupOpen, setIsServicePopupOpen] = useState(false);
    const toggleServicePopup = () => {
-      setIsServicePopupOpen(!isServicePopupOpen);
-  };
-
+     setIsServicePopupOpen(!isServicePopupOpen);
+   };
+ 
+   useEffect(() => {
+      const fetchData = async () => {
+          // Verificar se o token está presente e obter o token da localStorage
+          const token = localStorage.getItem('token');
+          console.log('Token:', token); // Imprimir o token no console
+  
+          // Restante do código para fazer a solicitação HTTP e obter os dados do usuário
+          if (!token) {
+              navigate('/login'); 
+              return;
+          }
+  
+          try {
+              const response = await axios.get('http://localhost:3000/protected-route', {
+                  headers: {
+                      Authorization: `Bearer ${token}`,
+                  },
+              });
+              setData(response.data);
+              setUserData(response.data.user); // Atualizar o estado userData com os dados do usuário
+          } catch (error) {
+              console.error('Erro ao buscar dados:', error);
+              localStorage.removeItem('token');
+              navigate('/login'); // Redirecionar para a página de login em caso de erro
+          }
+      };
+  
+      fetchData();
+  }, [navigate]);
+  
+ 
+   if (!data) return <p>Carregando...</p>;
+ 
    return (
-      <div className='container-main'>
-         <Header />
+     <div className='container-main'>
+       <Header userData={data.user} />
          <div className="imagem-fullscreen">
          </div>
          <div className="container-img-text">
             <div className='text-main'>
+               
                <div className="texto-superior">Conecte. Simplifique. Confie.</div>
                <div className="texto-sobreposicao">Facilitando o caminho dos seus documentos</div>
             </div>
