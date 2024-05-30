@@ -12,7 +12,7 @@ import ImgSecurity from '../assets/img/security.png';
 
 function Home() {
    const [data, setData] = useState(null);
-   const [userData, setUserData] = useState(null); // Adicionando estado para userData
+   const [userData, setUserData] = useState(null); 
    const navigate = useNavigate();
  
    const [isServicePopupOpen, setIsServicePopupOpen] = useState(false);

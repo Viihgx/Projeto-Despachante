@@ -77,7 +77,6 @@ app.post('/logout', authenticateToken, async (req, res) => {
   }
 });
 
-
 /// Rota protegida
 app.get('/protected-route', authenticateToken, async (req, res) => {
   try {
@@ -98,6 +97,36 @@ app.get('/protected-route', authenticateToken, async (req, res) => {
     res.status(403).json({ error: error.message });
   }
 });
+
+// Rota para cadastrar um novo serviço
+app.post('/cadastrar-servico', authenticateToken, async (req, res) => {
+  const { id_usuario, tipo_servico, forma_pagamento, status_servico, data_solicitacao, file_pdf } = req.body; // Certifique-se de incluir o arquivo PDF aqui
+
+  try {
+    // Insira os dados do serviço na tabela servicoSolicitado
+    const { data: servico, error } = await supabase
+      .from('servicoSolicitado')
+      .insert({
+        id_usuario,
+        tipo_servico,
+        forma_pagamento,
+        status_servico,
+        data_solicitacao,
+        file_pdf 
+      })
+      .single();
+
+    if (error) {
+      console.error('Erro ao cadastrar serviço:', error);
+      throw new Error('Erro ao cadastrar serviço');
+    }
+
+    res.status(201).json({ success: true, message: 'Serviço cadastrado com sucesso', servico });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
 
 // Inicia o servidor
 const PORT = process.env.PORT || 3000;

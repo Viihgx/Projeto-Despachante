@@ -11,11 +11,11 @@ import FileUpload from "../FileUpload/FileUpload";
 import CardService from "../Cards/CardService/CardService";
 import InformationService from "./InformationService";
 import PaymentForm from "./PaymentForm";
-import { cadastrarPagamento, cadastrarServicoSolicitado } from "../../Data/database";
+import cadastrarServico from '../../Data/Crud'; 
 
 const steps = ['Selecionar Serviço', 'Preencher informações', 'Enviar documento', 'Concluir'];
 
-const ServicePopup = ({ isOpen, toggleModal, usuarioId }) => {
+function ServicePopup({ isOpen, toggleModal, usuarioId }) {
   const [activeStep, setActiveStep] = useState(0);
   const [selectedCard, setSelectedCard] = useState(null);
   const [fullName, setFullName] = useState('');
@@ -24,89 +24,96 @@ const ServicePopup = ({ isOpen, toggleModal, usuarioId }) => {
   const [installments, setInstallments] = useState(1);
   const [isStepValid, setIsStepValid] = useState(false);
   const [isFileSelected, setIsFileSelected] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
   const [isPlanSelected, setIsPlanSelected] = useState(false);
   const [stepData, setStepData] = useState({
-    0: { selectedCard: null }, // Dados da primeira etapa
-    1: { fullName: '', cpf: '', paymentMethod: '', installments: 1 }, // Dados da segunda etapa
-    2: { isFileSelected: false }, // Dados da terceira etapa
-    3: { selectedPlan: null } // Dados da quarta etapa
+      0: { selectedCard: null },
+      1: { fullName: '', cpf: '', paymentMethod: '', installments: 1 },
+      2: { isFileSelected: false, file_pdp: null }, // Inicializa o estado do arquivo com null
+      3: { selectedPlan: null }
   });
-  
 
   const handleCloseClick = () => {
-    toggleModal();
-    setActiveStep(0);
-    setSelectedCard(null);
-    setFullName('');
-    setCpf('');
-    setPaymentMethod('');
-    setInstallments(1);
-    setIsFileSelected(false);
-    setIsPlanSelected(false);
+      toggleModal();
+      setActiveStep(0);
+      setSelectedCard(null);
+      setFullName('');
+      setCpf('');
+      setPaymentMethod('');
+      setInstallments(1);
+      setIsFileSelected(false);
+      setIsPlanSelected(false);
   };
 
   const handleNextStep = () => {
-    if (isStepValid) {
-      setActiveStep((prevStep) => prevStep + 1);
-      validateStep(activeStep + 1);
-    }
+      if (isStepValid) {
+          setActiveStep((prevStep) => prevStep + 1);
+          validateStep(activeStep + 1);
+      }
   };
 
   const handlePreviousStep = () => {
-    setActiveStep((prevStep) => prevStep - 1);
-    validateStep(activeStep - 1);
+      setActiveStep((prevStep) => prevStep - 1);
+      validateStep(activeStep - 1);
   };
 
   const handleFinish = async () => {
-    toggleModal();
-    setActiveStep(0);
-    setSelectedCard(null);
-    setFullName('');
-    setCpf('');
-    setPaymentMethod('');
-    setInstallments(1);
-    setIsFileSelected(false);
-    setIsPlanSelected(false);
+      toggleModal();
+      setActiveStep(0);
+      setSelectedCard(null);
+      setFullName('');
+      setCpf('');
+      setPaymentMethod('');
+      setInstallments(1);
+      setIsFileSelected(false);
+      setIsPlanSelected(false);
 
-    const detalhesPagamento = {
-      nomeCompleto: fullName,
-      cpf,
-      formaPagamento: paymentMethod,
-      parcelas: installments
-    };
-    const resultado = await cadastrarPagamento(detalhesPagamento);
-    if (resultado.success) {
-      console.log("Detalhes do pagamento cadastrados com sucesso!");
-  
-    } else {
-      console.error("Erro ao cadastrar detalhes do pagamento:", resultado.message);
+      const servico = {
+          id_usuario: usuarioId,
+          tipo_servico: selectedCard,
+          forma_pagamento: paymentMethod,
+          status_servico: 'pendente',
+          data_solicitacao: new Date().toISOString(),
+          file_pdp: stepData[2].file_pdp
+      };
 
-    }
+      const resultadoCadastro = await cadastrarServico(servico);
+      if (resultadoCadastro.success) {
+          console.log("Serviço cadastrado com sucesso!");
+      } else {
+          console.error("Erro ao cadastrar serviço:", resultadoCadastro.message);
+      }
   };
 
   const handleCardSelect = async (card) => {
-    setSelectedCard(card);
-    setStepData((prevData) => ({
-      ...prevData,
-      0: { selectedCard: card }
-    }));
+      setSelectedCard(card);
+      setStepData((prevData) => ({
+          ...prevData,
+          0: { selectedCard: card }
+      }));
   };
-  
+
   const handlePlanSelect = (planId) => {
-    setStepData((prevData) => ({
-      ...prevData,
-      3: { selectedPlan: planId }
-    }));
+      setStepData((prevData) => ({
+          ...prevData,
+          3: { selectedPlan: planId }
+      }));
   };
-  
+
   const handleFileSelect = (file) => {
-    setStepData((prevData) => ({
-      ...prevData,
-      2: { isFileSelected: file !== null }
-    }));
-  };
-  
-  
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        const fileData = e.target.result;
+        setStepData((prevData) => ({
+            ...prevData,
+            2: { isFileSelected: true, file_pdp: fileData } // Passa diretamente os dados do arquivo como string
+        }));
+        setIsFileSelected(true); // Atualiza isFileSelected para true
+    };
+
+    reader.readAsDataURL(file);
+};
+
 
   const validateStep = (step) => {
     switch (step) {
@@ -121,8 +128,8 @@ const ServicePopup = ({ isOpen, toggleModal, usuarioId }) => {
         );
         break;
       case 2:
-        setIsStepValid(stepData[2].isFileSelected);
-        break;
+        setIsStepValid(isFileSelected);
+        break;        
       case 3:
         setIsStepValid(stepData[3].selectedPlan !== null);
         break;
@@ -132,11 +139,10 @@ const ServicePopup = ({ isOpen, toggleModal, usuarioId }) => {
     }
   };
   
-  
   useEffect(() => {
     validateStep(activeStep);
     console.log("isFileSelected:", isFileSelected); // log para acompanhar o estado isFileSelected
-  }, [selectedCard, fullName, cpf, paymentMethod, isFileSelected]); 
+  }, [selectedCard, fullName, cpf, paymentMethod, isFileSelected]);
   
 
   if (!isOpen) return null;

@@ -20,7 +20,7 @@
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   }
   
-  .login-input {
+  /* .login-input {
     background-color: transparent;
     color: var(--cor-texto);
     margin-bottom: 10px;
@@ -30,17 +30,18 @@
     border: 1px solid #ddd;
     border-radius: 3px;
     box-sizing: border-box;
-  }
+  } */
 
-  input::placeholder {
+  /* input::placeholder {
     color: #fff;
     padding-left: 7px;
-  }
+  } */
   
   .login-button {
-    width: 88%;
-    height: 3.2rem;
+    width: 100%;
+    height: 3.4rem;
     padding: 10px;
+    margin-top: 10px;
     border: none;
     border-radius: 3px;
     background: var(--cor-secundaria);
