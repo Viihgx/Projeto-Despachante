@@ -4,6 +4,8 @@ const bcrypt = require('bcrypt');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const { createClient } = require('@supabase/supabase-js');
+const multer = require('multer');
+const fs = require('fs');
 
 const app = express();
 app.use(express.json());
@@ -14,6 +16,18 @@ const supabaseKey = process.env.SUPABASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 const SECRET_KEY = process.env.SECRET_KEY;
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/') // Diretório onde os arquivos serão salvos
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + '-' + file.originalname) // Nome do arquivo
+  }
+});
+
+const upload = multer({ storage: storage });
+
 
 // Middleware para verificar o token JWT
 const authenticateToken = (req, res, next) => {
@@ -98,9 +112,9 @@ app.get('/protected-route', authenticateToken, async (req, res) => {
   }
 });
 
-// Rota para cadastrar um novo serviço
+//rota para cadastrar serviço
 app.post('/cadastrar-servico', authenticateToken, async (req, res) => {
-  const { id_usuario, tipo_servico, forma_pagamento, status_servico, data_solicitacao, file_pdf } = req.body; // Certifique-se de incluir o arquivo PDF aqui
+  const { id_usuario, tipo_servico, forma_pagamento, status_servico, data_solicitacao } = req.body;
 
   try {
     // Insira os dados do serviço na tabela servicoSolicitado
@@ -112,7 +126,7 @@ app.post('/cadastrar-servico', authenticateToken, async (req, res) => {
         forma_pagamento,
         status_servico,
         data_solicitacao,
-        file_pdf 
+        file_pdf: req.body.file_pdf // Utilize a URL do arquivo PDF que foi retornada ao fazer o upload
       })
       .single();
 
@@ -127,6 +141,46 @@ app.post('/cadastrar-servico', authenticateToken, async (req, res) => {
   }
 });
 
+// rota de upload do arquivo pdf
+app.post('/upload-pdf', authenticateToken, upload.single('pdf'), async (req, res) => {
+  try {
+    const file = req.file;
+    if (!file) {
+      return res.status(400).json({ error: 'Nenhum arquivo enviado' });
+    }
+    
+    // Obtenha o token JWT do cabeçalho de autorização
+    const token = req.headers.authorization.split(' ')[1];
+    const decoded = jwt.decode(token);
+
+    // Upload do arquivo para o bucket no Supabase
+    const { data, error } = await supabase.storage
+      .from('arquivoPdf')
+      .upload(file.path, {
+        destination: `public/${file.originalname}`, // Define o destino como uma pasta pública com o nome original do arquivo
+        contentType: 'application/pdf',
+        upsert: false, // Impede a substituição do arquivo se ele já existir
+        cacheControl: '3600', // Define o controle de cache para 1 hora
+        metadata: {
+          id_usuario: decoded.id, // Adiciona o ID do usuário como metadado
+        },
+      });
+
+    if (error) {
+      console.error('Erro ao fazer o upload do arquivo PDF:', error.message);
+      return res.status(500).json({ error: 'Erro ao fazer o upload do arquivo PDF' });
+    }
+
+    // Log da URL pública do arquivo PDF antes de enviar a resposta
+    console.log('URL do arquivo PDF:', `${supabaseUrl}/storage/v1/object/public/${file.originalname}`);
+
+    // Retorne a URL pública do arquivo PDF
+    res.json({ url: `${supabaseUrl}/storage/v1/object/public/${file.originalname}` });
+  } catch (error) {
+    console.error('Erro ao processar o upload do arquivo PDF:', error.message);
+    res.status(500).json({ error: 'Erro ao processar o upload do arquivo PDF' });
+  }
+});
 
 // Inicia o servidor
 const PORT = process.env.PORT || 3000;

@@ -29,7 +29,7 @@ function ServicePopup({ isOpen, toggleModal, usuarioId }) {
   const [stepData, setStepData] = useState({
       0: { selectedCard: null },
       1: { fullName: '', cpf: '', paymentMethod: '', installments: 1 },
-      2: { isFileSelected: false, file_pdp: null }, // Inicializa o estado do arquivo com null
+      2: { isFileSelected: false, file_pdf: null }, // Inicializa o estado do arquivo com null
       3: { selectedPlan: null }
   });
 
@@ -58,32 +58,36 @@ function ServicePopup({ isOpen, toggleModal, usuarioId }) {
   };
 
   const handleFinish = async () => {
-      toggleModal();
-      setActiveStep(0);
-      setSelectedCard(null);
-      setFullName('');
-      setCpf('');
-      setPaymentMethod('');
-      setInstallments(1);
-      setIsFileSelected(false);
-      setIsPlanSelected(false);
+    toggleModal();
+    setActiveStep(0);
+    setSelectedCard(null);
+    setFullName('');
+    setCpf('');
+    setPaymentMethod('');
+    setInstallments(1);
+    setIsFileSelected(false);
+    setIsPlanSelected(false);
 
-      const servico = {
-          id_usuario: usuarioId,
-          tipo_servico: selectedCard,
-          forma_pagamento: paymentMethod,
-          status_servico: 'pendente',
-          data_solicitacao: new Date().toISOString(),
-          file_pdp: stepData[2].file_pdp
-      };
+    // Verifica se a URL do arquivo PDF está disponível no estado
+    const filePdfUrl = stepData[2]?.file_pdf;
 
-      const resultadoCadastro = await cadastrarServico(servico);
-      if (resultadoCadastro.success) {
-          console.log("Serviço cadastrado com sucesso!");
-      } else {
-          console.error("Erro ao cadastrar serviço:", resultadoCadastro.message);
-      }
-  };
+    const servico = {
+        id_usuario: usuarioId,
+        tipo_servico: selectedCard,
+        forma_pagamento: paymentMethod,
+        status_servico: 'pendente',
+        data_solicitacao: new Date().toISOString(),
+        file_pdf: filePdfUrl // Usa a URL do arquivo PDF
+    };
+
+    const resultadoCadastro = await cadastrarServico(servico);
+    if (resultadoCadastro.success) {
+        console.log("Serviço cadastrado com sucesso!");
+    } else {
+        console.error("Erro ao cadastrar serviço:", resultadoCadastro.message);
+    }
+};
+
 
   const handleCardSelect = async (card) => {
       setSelectedCard(card);
@@ -100,19 +104,44 @@ function ServicePopup({ isOpen, toggleModal, usuarioId }) {
       }));
   };
 
-  const handleFileSelect = (file) => {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-        const fileData = e.target.result;
-        setStepData((prevData) => ({
-            ...prevData,
-            2: { isFileSelected: true, file_pdp: fileData } // Passa diretamente os dados do arquivo como string
-        }));
-        setIsFileSelected(true); // Atualiza isFileSelected para true
-    };
+  const handleFileSelect = async (file) => {
+  try {
+    const formData = new FormData();
+    formData.append('pdf', file);
 
-    reader.readAsDataURL(file);
+    // Obtenha o token JWT do localStorage
+    const token = localStorage.getItem('token');
+
+    const response = await fetch('http://localhost:3000/upload-pdf', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`, // Inclua o token JWT no cabeçalho de autorização
+      },
+      body: formData
+    });
+
+    if (response.ok) {
+      const { url } = await response.json(); // Extrai a URL do PDF do corpo da resposta
+      console.log('Arquivo enviado com sucesso:', url);
+
+      // Atualize o estado com a URL do arquivo retornado pelo backend
+      setStepData((prevData) => ({
+        ...prevData,
+        2: { isFileSelected: true, file_pdf: url } // Armazena a URL no estado file_pdf
+      }));
+      setIsFileSelected(true);
+    } else {
+      const errorData = await response.json();
+      console.error('Erro ao enviar arquivo:', errorData.error);
+      setIsFileSelected(false);
+    }
+  } catch (error) {
+    console.error('Erro ao enviar arquivo:', error);
+    setIsFileSelected(false);
+  }
 };
+
+
 
 
   const validateStep = (step) => {
