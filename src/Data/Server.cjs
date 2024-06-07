@@ -111,6 +111,67 @@ app.get('/protected-route', authenticateToken, async (req, res) => {
   }
 });
 
+// Função para validar o email
+function validarEmail(email) {
+  const re = /\S+@\S+\.\S+/;
+  return re.test(email);
+}
+
+// Função para validar a senha
+function validarSenha(senha) {
+  const re = /^(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9]).{8,}$/;
+  return re.test(senha);
+}
+
+
+// Função para cadastrar usuário
+async function cadastrarUsuario(usuario) {
+  try {
+    if (!validarEmail(usuario.Email_usuario)) {
+      throw new Error('Endereço de e-mail inválido');
+    }
+    if (!validarSenha(usuario.Senha_usuario)) {
+      throw new Error('A senha deve conter ao menos um caractere maiúsculo, um caractere especial e um número.');
+    }
+    const hashedPassword = await bcrypt.hash(usuario.Senha_usuario, 10);
+    usuario.Senha_usuario = hashedPassword;
+    const { data, error } = await supabase
+      .from('Usuarios')
+      .insert([usuario]);
+    if (error) {
+      throw new Error(`Erro ao cadastrar usuário: ${error.message}`);
+    }
+    console.log('Usuário cadastrado com sucesso:', data);
+    return { success: true, usuario: data };
+  } catch (error) {
+    console.error(error);
+    return { success: false, message: error.message };
+  }
+}
+
+// Rota para cadastrar usuário
+app.post('/cadastro', async (req, res) => {
+  const { nome, email, senha } = req.body;
+
+  const usuario = {
+    Nome: nome,
+    Email_usuario: email,
+    Senha_usuario: senha
+  };
+
+  try {
+    const result = await cadastrarUsuario(usuario);
+    if (result.success) {
+      res.status(201).json(result);
+    } else {
+      res.status(400).json(result);
+    }
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+
 // Rota para cadastrar serviço
 app.post('/cadastrar-servico', authenticateToken, async (req, res) => {
   const { id_usuario, tipo_servico, forma_pagamento, status_servico, data_solicitacao, file_pdf } = req.body;
