@@ -91,39 +91,6 @@ app.post('/logout', authenticateToken, async (req, res) => {
   }
 });
 
-// Rota protegida
-app.get('/protected-route', authenticateToken, async (req, res) => {
-  try {
-    const { id } = req.user;
-    const { data: usuario, error } = await supabase
-      .from('Usuarios')
-      .select('*')
-      .eq('ID', id)
-      .single();
-
-    if (error || !usuario) {
-      throw new Error('Usuário não encontrado');
-    }
-
-    res.json({ message: 'Este é um conteúdo protegido', user: usuario });
-  } catch (error) {
-    res.status(403).json({ error: error.message });
-  }
-});
-
-// Função para validar o email
-function validarEmail(email) {
-  const re = /\S+@\S+\.\S+/;
-  return re.test(email);
-}
-
-// Função para validar a senha
-function validarSenha(senha) {
-  const re = /^(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9]).{8,}$/;
-  return re.test(senha);
-}
-
-
 // Função para cadastrar usuário
 async function cadastrarUsuario(usuario) {
   try {
@@ -171,6 +138,37 @@ app.post('/cadastro', async (req, res) => {
   }
 });
 
+// Rota protegida
+app.get('/protected-route', authenticateToken, async (req, res) => {
+  try {
+    const { id } = req.user;
+    const { data: usuario, error } = await supabase
+      .from('Usuarios')
+      .select('*')
+      .eq('ID', id)
+      .single();
+
+    if (error || !usuario) {
+      throw new Error('Usuário não encontrado');
+    }
+
+    res.json({ message: 'Este é um conteúdo protegido', user: usuario });
+  } catch (error) {
+    res.status(403).json({ error: error.message });
+  }
+});
+
+// Função para validar o email
+function validarEmail(email) {
+  const re = /\S+@\S+\.\S+/;
+  return re.test(email);
+}
+
+// Função para validar a senha
+function validarSenha(senha) {
+  const re = /^(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9]).{8,}$/;
+  return re.test(senha);
+}
 
 // Rota para cadastrar serviço
 app.post('/cadastrar-servico', authenticateToken, async (req, res) => {

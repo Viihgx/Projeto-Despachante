@@ -10,6 +10,7 @@ import ImgCaminhoesTarde from '../assets/img/ImgCaminhoesTarde.jpg';
 import ImgComoTrabalhamos from '../assets/img/comoTrabalhamos.png';
 import ImgBox from '../assets/img/box.png';
 import ImgSecurity from '../assets/img/security.png';
+import MapComponent from '../api/Map';
 
 function Home() {
    const [data, setData] = useState(null);
@@ -20,6 +21,12 @@ function Home() {
    const toggleServicePopup = () => {
      setIsServicePopupOpen(!isServicePopupOpen);
    };
+
+   const [markers, setMarkers] = useState([
+      { position: [-3.71722, -38.5434], popupText: 'Ponto 1' },
+      { position: [-3.72722, -38.5334], popupText: 'Ponto 2' },
+      { position: [-3.73722, -38.5234], popupText: 'Ponto 3' },
+    ]);
  
    useEffect(() => {
       const fetchData = async () => {
@@ -116,8 +123,12 @@ function Home() {
                      </div>
                   </div>
                </div>
-               <Footer />
             </div>  
+               <div className='container-master'>
+                  <h1>Mapa com React Leaflet</h1>
+                  <MapComponent markers={markers} />
+               </div>
+                  <Footer />
             <ServicePopup 
                 isOpen={isServicePopupOpen} 
                 toggleModal={toggleServicePopup} 
