@@ -40,6 +40,17 @@ function ServicePopup({ isOpen, toggleModal, usuarioId }) {
     3: { selectedPlan: null }
   });
 
+  useEffect(() => {
+    if (isOpen) {
+      document.body.classList.add('modal-open');
+    } else {
+      document.body.classList.remove('modal-open');
+    }
+    return () => {
+      document.body.classList.remove('modal-open');
+    };
+  }, [isOpen]);
+
   const handleCloseClick = () => {
     toggleModal();
     resetState();
@@ -192,7 +203,7 @@ function ServicePopup({ isOpen, toggleModal, usuarioId }) {
 
   return (
     <div className="service-popup-container">
-      <div className="modal-1-overlay" onClick={handleCloseClick}>
+      <div className="modal-1-overlay">
         <div className="modal-1-modal" onClick={(e) => e.stopPropagation()}>
           <div>
             <ArrowBackIcon className="icon-retornar" sx={{ cursor: 'pointer' }} onClick={handleCloseClick} />
