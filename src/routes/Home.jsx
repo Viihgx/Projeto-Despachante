@@ -4,6 +4,7 @@ import axios from 'axios';
 import './Home.css';
 import Header from '../components/Header/Header';
 import Card from '../components/Card/Card';
+import Footer from '../components/Footer/Footer';
 import ServicePopup from '../components/Service/ServicePopup';
 import ImgCaminhoesTarde from '../assets/img/ImgCaminhoesTarde.jpg';
 import ImgComoTrabalhamos from '../assets/img/comoTrabalhamos.png';
@@ -115,6 +116,7 @@ function Home() {
                      </div>
                   </div>
                </div>
+               <Footer />
             </div>  
             <ServicePopup 
                 isOpen={isServicePopupOpen} 
