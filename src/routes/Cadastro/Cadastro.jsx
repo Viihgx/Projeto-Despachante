@@ -2,40 +2,36 @@ import './Cadastro.css';
 import imageGoogle from '../../assets/img/googleIcon.png';
 import imageApple from '../../assets/img/IconApple.png';
 import imageEmail from '../../assets/img/IconEmail.png';
-import { cadastrarUsuario } from '../../Data/database';
 import React, { useState } from 'react';
-
+import axios from 'axios';
 
 function Cadastro() {
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
-  const [setErrorMessage] = useState('');
-  // const history = useHistory(); // Inicializando o useHistory
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleCadastro = async () => {
-    // Verifica se os campos obrigatórios foram preenchidos
     if (!nome || !email || !senha) {
       setErrorMessage('Por favor, preencha todos os campos.');
       return;
     }
 
-    // Realiza o cadastro do usuário
     const usuario = {
-      Nome: nome,
-      Email_usuario: email,
-      Senha_usuario: senha
+      nome,
+      email,
+      senha
     };
 
-    const { success, message } = await cadastrarUsuario(usuario);
-
-    if (success) {
-      // Redireciona para a página de sucesso ou faz outra ação
-      console.log('Usuário cadastrado com sucesso!');
-      // Aqui você pode redirecionar para a página de sucesso
-      window.location.href = '/';
-    } else {
-      setErrorMessage(message);
+    try {
+      const response = await axios.post('http://localhost:3000/cadastro', usuario);
+      if (response.data.success) {
+        window.location.href = '/';
+      } else {
+        setErrorMessage(response.data.message);
+      }
+    } catch (error) {
+      setErrorMessage('Erro ao cadastrar usuário');
     }
   };
 
@@ -44,7 +40,7 @@ function Cadastro() {
       <div className="register-form">
         <h2 className='p-text'>Crie sua conta</h2>
         <input
-          type="name"
+          type="text"
           className="register-input"
           placeholder="Nome"
           value={nome}
@@ -83,6 +79,7 @@ function Cadastro() {
             Continuar com o Email
           </div>
         </div>
+        {errorMessage && <p className="error-message">{errorMessage}</p>}
       </div>
     </div>
   );
