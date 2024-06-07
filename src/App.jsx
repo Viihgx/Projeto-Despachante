@@ -3,6 +3,7 @@ import Login from './routes/Login';
 import Home from './routes/Home';
 import Cadastro from './routes/Cadastro/Cadastro';
 import ServicePopup from './components/Service/ServicePopup';
+import RecuperarSenha from './routes/RecuperarSenha';
 import React, { useState } from 'react';
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
           <Route path="/" element={<Login />} />
           <Route path="home" element={<Home />} />
           <Route path="cadastro" element={<Cadastro />} />
+          <Route path="recuperarsenha" element={<RecuperarSenha />} />
           <Route path="service" element={<ServicePopup 
             isOpen={isServicePopupOpen} 
             toggleModal={() => setIsServicePopupOpen(!isServicePopupOpen)} />}  // Passa isOpen e toggleModal como props para ServicePopup 

@@ -9,6 +9,7 @@ const fs = require('fs');
 const path = require('path');
 const axios = require('axios');
 const FormData = require('form-data');
+const { recuperarSenha } = require('./RecuperarSenha.cjs'); 
 
 const app = express();
 app.use(express.json());
@@ -46,6 +47,64 @@ const authenticateToken = (req, res, next) => {
     next();
   });
 };
+
+ 
+// Rota para recuperar senha
+app.post('/recuperar-senha', async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    console.log('Solicitação de recuperação de senha recebida para:', email);
+    await recuperarSenha(email);
+    res.json({ success: true, message: 'PIN de redefinição enviado para o email' });
+  } catch (error) {
+    console.error('Erro ao processar solicitação de recuperação de senha:', error.message);
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+// Rota para validar o PIN e redefinir a senha
+app.post('/redefinir-senha', async (req, res) => {
+  const { email, pin, novaSenha } = req.body;
+
+  try {
+    const { data: usuario, error } = await supabase
+      .from('Usuarios')
+      .select('*')
+      .eq('Email_usuario', email)
+      .eq('pin_recuperacao', pin)
+      .single();
+
+    if (error || !usuario) {
+      console.error('Erro ao encontrar usuário ou PIN inválido:', error);
+      throw new Error('PIN inválido ou expirado');
+    }
+
+    const expiracao = new Date(usuario.expiracao_pin);
+    const agora = new Date();
+
+    console.log('Expiração do PIN:', expiracao);
+    console.log('Hora atual:', agora);
+
+    if (agora > expiracao) {
+      console.error('PIN expirado');
+      throw new Error('PIN expirado');
+    }
+
+    const hashedPassword = await bcrypt.hash(novaSenha, 10);
+    await supabase
+      .from('Usuarios')
+      .update({ Senha_usuario: hashedPassword, pin_recuperacao: null, expiracao_pin: null })
+      .eq('Email_usuario', email);
+
+    res.json({ success: true, message: 'Senha redefinida com sucesso' });
+  } catch (error) {
+    console.error('Erro ao redefinir senha:', error.message);
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+
 
 // Função para validar o login
 async function validarLogin(email, senha) {

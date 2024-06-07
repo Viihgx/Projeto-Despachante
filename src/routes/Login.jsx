@@ -127,7 +127,9 @@ function Login() {
                 <button type="button" className="login-button" onClick={handleLogin}>
                     Entrar
                 </button>
+                <Link to='/RecuperarSenha' style={{ textDecoration: 'none' }}>
                 <p>Esqueceu a Senha?</p>
+                </Link>
                 <Link to='/Cadastro' style={{ textDecoration: 'none' }}>
                     <p>Criar Conta</p>
                 </Link>
