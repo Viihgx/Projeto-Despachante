@@ -4,6 +4,7 @@ import 'leaflet/dist/leaflet.css';
 import './Map.css';  // Importando o arquivo CSS
 import L from 'leaflet';
 import axios from 'axios';
+import Centralizar from '../assets/img/Centralizar.png';
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -28,7 +29,7 @@ const ResetViewControl = ({ center, zoom }) => {
       className="leaflet-control-reset-view"
       onClick={handleClick}
     >
-      Centralizar
+      <img src={Centralizar} alt="Centralizar" style={{ width: '20px', height: '20px' }} />
     </div>
   );
 };
