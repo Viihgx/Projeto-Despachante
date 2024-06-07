@@ -40,6 +40,7 @@ function Home() {
               });
               setData(response.data);
               setUserData(response.data.user); // Atualizar o estado userData com os dados do usuário
+              console.log('User Data:', response.data.user); // Adicione um log para verificar os dados do usuário
           } catch (error) {
               console.error('Erro ao buscar dados:', error);
               localStorage.removeItem('token');
@@ -115,7 +116,11 @@ function Home() {
                   </div>
                </div>
             </div>  
-            <ServicePopup isOpen={isServicePopupOpen} toggleModal={toggleServicePopup} />
+            <ServicePopup 
+                isOpen={isServicePopupOpen} 
+                toggleModal={toggleServicePopup} 
+                usuarioId={userData?.ID || null} // Passando o usuarioId
+            />
       </div>
 
    );
