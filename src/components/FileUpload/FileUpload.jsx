@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './FileUpload.css';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import CloseIcon from '@mui/icons-material/Close';
 
-function FileUpload({ onFileSelect }) {
-    const [selectedFile, setSelectedFile] = useState(null); // Adicionando o estado para o arquivo selecionado
+function FileUpload({ onFileSelect, selectedFile }) {
+    const [localSelectedFile, setLocalSelectedFile] = useState(null);
+
+    useEffect(() => {
+        setLocalSelectedFile(selectedFile);
+    }, [selectedFile]);
 
     const handleFileChange = (event) => {
         const files = event.target.files;
@@ -14,8 +18,13 @@ function FileUpload({ onFileSelect }) {
         }
 
         const file = files[0];
-        setSelectedFile(file); // Atualizando o estado com o arquivo selecionado
-        onFileSelect(file); // Passa o arquivo selecionado de volta para o componente pai
+        setLocalSelectedFile(file);
+        onFileSelect(file);
+    };
+
+    const handleRemoveFile = () => {
+        setLocalSelectedFile(null);
+        onFileSelect(null);
     };
 
     return (
@@ -33,11 +42,10 @@ function FileUpload({ onFileSelect }) {
             <label htmlFor="fileInput" className="upload-button">
                 Escolher arquivo
             </label>
-            {/* Aqui permanece a parte de exibir o nome do arquivo selecionado e o botão de exclusão */}
-            {selectedFile && (
+            {localSelectedFile && (
                 <div className="selected-file">
-                    <span className="file-name">{selectedFile.name}</span>
-                    <CloseIcon style={{ color: 'red', cursor: 'pointer', fontSize:'small' }} onClick={() => setSelectedFile(null)} />
+                    <span className="file-name">{localSelectedFile.name}</span>
+                    <CloseIcon style={{ color: 'red', cursor: 'pointer', fontSize:'small' }} onClick={handleRemoveFile} />
                 </div>
             )}
         </div>

@@ -18,32 +18,55 @@ const steps = ['Selecionar Serviço', 'Preencher informações', 'Enviar documen
 function ServicePopup({ isOpen, toggleModal, usuarioId }) {
   const [activeStep, setActiveStep] = useState(0);
   const [selectedCard, setSelectedCard] = useState(null);
-  const [fullName, setFullName] = useState('');
-  const [cpf, setCpf] = useState('');
-  const [paymentMethod, setPaymentMethod] = useState('');
+  const [informationData, setInformationData] = useState({
+    fullName: '',
+    nameVeiculo: '',
+    cpf: '',
+    licensePlate: ''
+  });
+  const [paymentData, setPaymentData] = useState({
+    fullName: '',
+    cpf: '',
+    paymentMethod: '',
+    installments: 1
+  });
   const [errorMessage, setErrorMessage] = useState('');
-  const [installments, setInstallments] = useState(1);
   const [isStepValid, setIsStepValid] = useState(false);
   const [isFileSelected, setIsFileSelected] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
-  const [isPlanSelected, setIsPlanSelected] = useState(false);
   const [stepData, setStepData] = useState({
     0: { selectedCard: null },
-    1: { fullName: '', cpf: '', paymentMethod: '', installments: 1 },
     2: { isFileSelected: false, file_pdf: null },
     3: { selectedPlan: null }
   });
 
   const handleCloseClick = () => {
     toggleModal();
+    resetState();
+  };
+
+  const resetState = () => {
     setActiveStep(0);
     setSelectedCard(null);
-    setFullName('');
-    setCpf('');
-    setPaymentMethod('');
-    setInstallments(1);
+    setInformationData({
+      fullName: '',
+      nameVeiculo: '',
+      cpf: '',
+      licensePlate: ''
+    });
+    setPaymentData({
+      fullName: '',
+      cpf: '',
+      paymentMethod: '',
+      installments: 1
+    });
     setIsFileSelected(false);
-    setIsPlanSelected(false);
+    setSelectedFile(null);
+    setStepData({
+      0: { selectedCard: null },
+      2: { isFileSelected: false, file_pdf: null },
+      3: { selectedPlan: null }
+    });
     setErrorMessage('');
   };
 
@@ -64,14 +87,13 @@ function ServicePopup({ isOpen, toggleModal, usuarioId }) {
       setErrorMessage("Por favor, selecione um arquivo PDF antes de finalizar.");
       return;
     }
-  
+
     try {
       const formData = new FormData();
       formData.append('pdf', selectedFile);
-  
+
       const token = localStorage.getItem('token');
-  
-      // Envie o arquivo PDF ao backend
+
       const response = await fetch('http://localhost:3000/upload-pdf', {
         method: 'POST',
         headers: {
@@ -79,26 +101,26 @@ function ServicePopup({ isOpen, toggleModal, usuarioId }) {
         },
         body: formData,
       });
-  
+
       if (!response.ok) {
         const errorData = await response.json();
         console.error('Erro ao enviar arquivo:', errorData.error);
         setErrorMessage('Erro ao enviar arquivo: ' + errorData.error);
         return;
       }
-  
+
       const { url } = await response.json();
       console.log('Arquivo enviado com sucesso:', url);
-  
+
       const servico = {
         id_usuario: usuarioId,
         tipo_servico: selectedCard,
-        forma_pagamento: paymentMethod,
+        forma_pagamento: paymentData.paymentMethod,
         status_servico: 'pendente',
         data_solicitacao: new Date().toISOString(),
         file_pdf: url
       };
-  
+
       const resultadoCadastro = await cadastrarServico(servico);
       if (resultadoCadastro.success) {
         console.log("Serviço cadastrado com sucesso!");
@@ -112,8 +134,6 @@ function ServicePopup({ isOpen, toggleModal, usuarioId }) {
       setErrorMessage("Erro ao finalizar o serviço: " + error.message);
     }
   };
-  
-  
 
   const handleCardSelect = async (card) => {
     setSelectedCard(card);
@@ -146,16 +166,17 @@ function ServicePopup({ isOpen, toggleModal, usuarioId }) {
         break;
       case 1:
         setIsStepValid(
-          stepData[1].fullName !== '' &&
-          stepData[1].cpf !== '' &&
-          stepData[1].paymentMethod !== ''
+          informationData.fullName !== '' &&
+          informationData.cpf !== '' &&
+          informationData.nameVeiculo !== '' &&
+          informationData.licensePlate !== ''
         );
         break;
       case 2:
         setIsStepValid(isFileSelected);
         break;
       case 3:
-        setIsStepValid(stepData[3].selectedPlan !== null);
+        setIsStepValid(paymentData.paymentMethod !== '');
         break;
       default:
         setIsStepValid(true);
@@ -165,8 +186,7 @@ function ServicePopup({ isOpen, toggleModal, usuarioId }) {
 
   useEffect(() => {
     validateStep(activeStep);
-    console.log("isFileSelected:", isFileSelected);
-  }, [selectedCard, fullName, cpf, paymentMethod, isFileSelected]);
+  }, [selectedCard, informationData, paymentData, isFileSelected, activeStep]);
 
   if (!isOpen) return null;
 
@@ -187,12 +207,14 @@ function ServicePopup({ isOpen, toggleModal, usuarioId }) {
           </Stepper>
           <div className="popup-content">
             {activeStep === 0 && (
-              <div>
-                <CardService onSelect={handleCardSelect} />
-              </div>
+              <CardService onSelect={handleCardSelect} selectedCard={stepData[0].selectedCard} />
             )}
             {activeStep === 1 && (
-              <InformationService setIsStepValid={setIsStepValid} />
+              <InformationService
+                informationData={informationData}
+                setInformationData={setInformationData}
+                setIsStepValid={setIsStepValid}
+              />
             )}
             {activeStep === 2 && (
               <>
@@ -205,13 +227,12 @@ function ServicePopup({ isOpen, toggleModal, usuarioId }) {
                       <li>Cópia da CNH ou identidade.</li>
                       <li>CPF do nome do remetente.</li>
                     </ul>
-                    <FileUpload onFileSelect={handleFileSelect} />
+                    <FileUpload
+                      onFileSelect={handleFileSelect}
+                      selectedFile={stepData[2].file_pdf}
+                    />
                   </div>
                 )}
-              </>
-            )}
-            {activeStep === 2 && (
-              <>
                 {selectedCard === "placa-mercosul" && (
                   <div className="container-file-upload">
                     <h1 className="title-service-select">Placa Mercosul</h1>
@@ -223,13 +244,12 @@ function ServicePopup({ isOpen, toggleModal, usuarioId }) {
                       <li>Recibo de compra e venda (caso a placa for modelo antigo).</li>
                       <li>B.O de perda da placa (caso ela tenha sido extraviada).</li>
                     </ul>
-                    <FileUpload onFileSelect={handleFileSelect} />
+                    <FileUpload
+                      onFileSelect={handleFileSelect}
+                      selectedFile={stepData[2].file_pdf}
+                    />
                   </div>
                 )}
-              </>
-            )}
-            {activeStep === 2 && (
-              <>
                 {selectedCard === "segunda-via" && (
                   <div className="container-file-upload">
                     <h1 className="title-service-select">Segunda Via</h1>
@@ -240,13 +260,12 @@ function ServicePopup({ isOpen, toggleModal, usuarioId }) {
                       <li>CPF do proprietário do veículo.</li>
                       <li>B.O de perda do CRV.</li>
                     </ul>
-                    <FileUpload onFileSelect={handleFileSelect} />
+                    <FileUpload
+                      onFileSelect={handleFileSelect}
+                      selectedFile={stepData[2].file_pdf}
+                    />
                   </div>
                 )}
-              </>
-            )}
-            {activeStep === 2 && (
-              <>
                 {selectedCard === "transferencia-veicular" && (
                   <div className="container-file-upload">
                     <h1 className="title-service-select">Transferencia Veicular</h1>
@@ -256,23 +275,26 @@ function ServicePopup({ isOpen, toggleModal, usuarioId }) {
                       <li>Cópia da CNH ou identidade.</li>
                       <li>CPF do comprador do veículo.</li>
                     </ul>
-                    <FileUpload onFileSelect={handleFileSelect} />
+                    <FileUpload
+                      onFileSelect={handleFileSelect}
+                      selectedFile={stepData[2].file_pdf}
+                    />
                   </div>
                 )}
               </>
             )}
             {activeStep === 3 && (
               <div>
-                <PlanCards onSelect={handlePlanSelect} />
+                <PlanCards onSelect={handlePlanSelect} selectedPlan={stepData[3].selectedPlan} />
                 <PaymentForm
-                  fullName={fullName}
-                  setFullName={setFullName}
-                  cpf={cpf}
-                  setCpf={setCpf}
-                  paymentMethod={paymentMethod}
-                  setPaymentMethod={setPaymentMethod}
-                  installments={installments}
-                  setInstallments={setInstallments}
+                  fullName={paymentData.fullName}
+                  setFullName={(value) => setPaymentData({ ...paymentData, fullName: value })}
+                  cpf={paymentData.cpf}
+                  setCpf={(value) => setPaymentData({ ...paymentData, cpf: value })}
+                  paymentMethod={paymentData.paymentMethod}
+                  setPaymentMethod={(value) => setPaymentData({ ...paymentData, paymentMethod: value })}
+                  installments={paymentData.installments}
+                  setInstallments={(value) => setPaymentData({ ...paymentData, installments: value })}
                 />
               </div>
             )}
