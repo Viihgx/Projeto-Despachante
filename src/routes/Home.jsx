@@ -125,7 +125,7 @@ function Home() {
           </div>
         </div>
         <div className='container-master'>
-          <h1>Mapa com React Leaflet</h1>
+          <h1>Pontos de vistorias</h1>
           <MapComponent markers={markers} />
         </div>
       </div>
