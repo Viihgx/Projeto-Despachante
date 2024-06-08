@@ -135,8 +135,55 @@
     width: 650px;
 }
 
+.parallax {
+    position: relative;
+    height: 700px; /* Ajuste conforme necessário */
+    margin-bottom: 2rem;
+    overflow: hidden;
+}
 
+.parallax::before {
+    content: "";
+    background-image: url('https://prd-us-brc-wapp-01.azurewebsites.net/content/images/2021/05/como-funciona-a-vistoria-veicular-para-transferencia.jpg');
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    filter: blur(3.5px); /* Adiciona um leve desfoque */
+    z-index: -1;
+}
 
+.parallax-content {
+    position: relative;
+    z-index: 1;
+    background: rgba(255, 255, 255, 0.8); /* Fundo branco com transparência */
+    padding: 2rem 0;
+}
+
+.parallax .overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+    text-align: center;
+    z-index: 1; /* Certifique-se de que o texto está acima do pseudo-elemento */
+}
+
+.parallax .overlay .parallax-title {
+    font-size: 2rem;
+    font-weight: bold;
+    text-shadow: 2px 4px 0px rgba(0, 0, 0, 0.2);
+    margin-bottom: 1rem;
+}
 
 @media (max-width: 1024px) {
     .texto-superior {
