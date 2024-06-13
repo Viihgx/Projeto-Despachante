@@ -1,24 +1,15 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import './Header.css';
-// import { logout } from '../../Data/database';
-// import Button from '@mui/material/Button';
-// import ServicePopup from '../Service/ServicePopup'; 
 
 function Header({ userData }) {
-  const navigate = useNavigate(); // Usando useNavigate para navegação programática
+  const navigate = useNavigate();
 
   const [anchorEl, setAnchorEl] = useState(null);
-  const [isServicePopupOpen, setIsServicePopupOpen] = useState(false);
-
-  const toggleServicePopup = () => {
-    setIsServicePopupOpen(!isServicePopupOpen);
-  };
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -39,13 +30,18 @@ function Header({ userData }) {
       if (response.data.success) {
         console.log('Logout bem-sucedido');
         localStorage.removeItem('token');
-        navigate('/'); // Usando navigate para redirecionar para a página de login
+        navigate('/'); // Redirecionar para a página de login
       } else {
         console.error('Erro ao realizar logout:', response.data.error);
       }
     } catch (error) {
       console.error('Erro ao realizar logout:', error);
     }
+  };
+
+  const handleMeuPerfil = () => {
+    navigate('/Usuario'); // Redirecionar para a página de perfil do usuário
+    handleClose();
   };
 
   const [prevScrollPos, setPrevScrollPos] = useState(window.pageYOffset);
@@ -81,36 +77,27 @@ function Header({ userData }) {
             <a href="#" className="Menu">Serviço</a>
           </li>
         </ul>
-        {/* <Button 
-        onClick={(e) => { e.preventDefault(); toggleServicePopup(); }}
-        sx={{
-          borderRadius: '2.7rem',
-          background: 'var(--cor-secundaria)',
-          color: 'color: rgba(17, 17, 17, 1)',
-          fontSize: '13px',
-          fontWeight: '550',
-          border: '.5px solid #fff',
-          lineHeight: '1.5',
-          '&:hover': {
-            background: 'var(--cor-primaria)',
-          },
-        }} variant="contained">
-          Solicitar
-        </Button> */}
-        <span>Olá, {userData.Nome}</span>
-        <div style={{ cursor: "pointer" }} onClick={handleClick}>
-          <PersonOutlineOutlinedIcon />
-        </div>
-        <Menu
-          anchorEl={anchorEl}
-          open={Boolean(anchorEl)}
-          onClose={handleClose}
-        >
-          <MenuItem onClick={handleClose}>Meu Perfil</MenuItem>
-          <Link to="/" ><MenuItem onClick={handleLogout}>Sair</MenuItem></Link>
-        </Menu>
+
+        
+        {userData ? (
+          <>
+            <span>Olá, {userData.Nome}</span>
+            <div style={{ cursor: "pointer" }} onClick={handleClick}>
+              <PersonOutlineOutlinedIcon />
+            </div>
+            <Menu
+              anchorEl={anchorEl}
+              open={Boolean(anchorEl)}
+              onClose={handleClose}
+            >
+              <MenuItem onClick={handleMeuPerfil}>Meu Perfil</MenuItem>
+              <MenuItem onClick={handleLogout}>Sair</MenuItem>
+            </Menu>
+          </>
+        ) : (
+          <span>Carregando...</span>
+        )}
       </nav>
-      {/* <ServicePopup isOpen={true} toggleModal={toggleModal} /> */}
     </header>
   );
 }

@@ -1,0 +1,52 @@
+.outra-secao-container {
+  padding: 20px;
+  background-color: #f5f5f5;
+  border-radius: 5px;
+}
+
+.outra-secao-container h2 {
+  color: #111c55;
+}
+
+.outra-secao-container ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.outra-secao-container li {
+  background: #fff;
+  cursor: pointer;
+  margin-bottom: 10px;
+  padding: 15px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.outra-secao-container li h3 {
+  margin: 0;
+  color: #111c55;
+}
+
+.outra-secao-container li p {
+  margin: 5px 0;
+  color: #333;
+}
+
+.outra-secao-container li a {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 10px 15px;
+  background-color: var(--cor-secundaria-yellow);
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.outra-secao-container li a:hover {
+  background-color: var(--cor-primaria);
+}
+
+.error {
+  color: red;
+}

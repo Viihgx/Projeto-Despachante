@@ -4,7 +4,7 @@ const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseKey = import.meta.env.VITE_SUPABASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-async function cadastrarServico({ id_usuario, tipo_servico, forma_pagamento, status_servico, data_solicitacao, file_pdf }) {
+async function cadastrarServico({ id_usuario, tipo_servico, forma_pagamento, status_servico, data_solicitacao, file_pdfs }) {
   try {
     const { data, error } = await supabase
       .from('servicoSolicitado')
@@ -14,7 +14,7 @@ async function cadastrarServico({ id_usuario, tipo_servico, forma_pagamento, sta
         forma_pagamento,
         status_servico,
         data_solicitacao,
-        file_pdf
+        file_pdfs
       })
       .single();
 

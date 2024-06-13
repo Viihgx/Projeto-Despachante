@@ -76,10 +76,14 @@ function Login() {
 
         try {
             const response = await axios.post('http://localhost:3000/login', { email, senha });
-            const { token } = response.data;
+            const { token, is_moderador } = response.data;
             localStorage.setItem('token', token);
             setError('');
-            navigate('/Home');
+            if (is_moderador) {
+                navigate('/Moderador');
+            } else {
+                navigate('/Home');
+            }
         } catch (error) {
             setError('Login falhou. Verifique suas credenciais e tente novamente.');
         }

@@ -1,0 +1,38 @@
+.info-servico {
+  padding: 20px;
+}
+
+.title-servico {
+  color: var(--cor-primaria);
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 20px;
+}
+
+.servicos-list {
+  margin: 20px 0;
+}
+
+.servicos-list table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.servicos-list th, .servicos-list td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.servicos-list th {
+  background-color: #f2f2f2;
+  text-align: left;
+}
+
+.servicos-list tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.servicos-list tr:hover {
+  background-color: #f1f1f1;
+  cursor: pointer;
+}

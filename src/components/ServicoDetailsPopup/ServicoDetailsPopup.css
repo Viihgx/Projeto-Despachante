@@ -1,0 +1,113 @@
+.servico-details-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.servico-details-content {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  max-width: 600px;
+  width: 100%;
+  max-height: 80%;
+  overflow-y: auto;
+}
+
+.servico-details-content h2 {
+  color: #111c55;
+  margin-top: 0;
+}
+
+.servico-details-content p {
+  color: #666;
+  margin: 5px 0;
+}
+
+.servico-details-content textarea {
+  width: 100%;
+  height: 100px;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.download-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  border: 1px solid #ccc;
+  background-color: transparent;
+}
+
+.download-container a {
+  text-decoration: none;
+  color: #000ac9;
+  font-size: 16px;
+}
+
+.btn-download .download-p {
+  color: white;
+  text-decoration: none;
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.btn-download .download-p:hover {
+  color: white;
+}
+
+.servico-details-content .btn-enviar-msg {
+  padding: 10px 15px;
+  background-color: var(--cor-secundaria-yellow);
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.servico-details-content .btn-enviar-msg:hover {
+  background-color: var(--cor-primaria);
+}
+
+.select-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.select-wrapper select {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.select-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid #333;
+  pointer-events: none;
+  transform: translateY(-50%);
+}

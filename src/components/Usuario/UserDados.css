@@ -1,0 +1,39 @@
+.bv {
+    font-family: 'Epilogue', sans-serif;
+    font-size: 1.2rem;
+    display: inline-block;
+    margin: 20px;
+    border-bottom: 1px solid rgb(48, 48, 48);
+    padding-bottom: 3px;
+  }
+  
+  .nome,
+  .email,
+  .endereco,
+  .contato {
+    font-family: 'Epilogue', sans-serif;
+    color: #777777;
+    font-size: 1.0rem;
+    margin: 20px;
+  }
+  
+  .title {
+    color: var(--cor-primaria);
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0;
+  }
+  
+  .title-dados,
+  .title-veiculo,
+  .title-servico {
+    color: var(--cor-primaria);
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 20px;
+  }
+  
+  .info-usuario {
+    padding: 20px;
+  }
+  

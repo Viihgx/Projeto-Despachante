@@ -11,7 +11,6 @@ import FileUpload from "../FileUpload/FileUpload";
 import CardService from "../Cards/CardService/CardService";
 import InformationService from "./InformationService";
 import PaymentForm from "./PaymentForm";
-import cadastrarServico from '../../Data/Crud';
 
 const steps = ['Selecionar Serviço', 'Preencher informações', 'Enviar documento', 'Concluir'];
 
@@ -32,11 +31,10 @@ function ServicePopup({ isOpen, toggleModal, usuarioId }) {
   });
   const [errorMessage, setErrorMessage] = useState('');
   const [isStepValid, setIsStepValid] = useState(false);
-  const [isFileSelected, setIsFileSelected] = useState(false);
-  const [selectedFile, setSelectedFile] = useState(null);
+  const [selectedFiles, setSelectedFiles] = useState([]);
   const [stepData, setStepData] = useState({
     0: { selectedCard: null },
-    2: { isFileSelected: false, file_pdf: null },
+    2: { isFileSelected: false, file_pdfs: [] },
     3: { selectedPlan: null }
   });
 
@@ -71,11 +69,10 @@ function ServicePopup({ isOpen, toggleModal, usuarioId }) {
       paymentMethod: '',
       installments: 1
     });
-    setIsFileSelected(false);
-    setSelectedFile(null);
+    setSelectedFiles([]);
     setStepData({
       0: { selectedCard: null },
-      2: { isFileSelected: false, file_pdf: null },
+      2: { isFileSelected: false, file_pdfs: [] },
       3: { selectedPlan: null }
     });
     setErrorMessage('');
@@ -94,14 +91,16 @@ function ServicePopup({ isOpen, toggleModal, usuarioId }) {
   };
 
   const handleFinish = async () => {
-    if (!selectedFile) {
-      setErrorMessage("Por favor, selecione um arquivo PDF antes de finalizar.");
+    if (selectedFiles.length === 0) {
+      setErrorMessage("Por favor, selecione um ou mais arquivos PDF antes de finalizar.");
       return;
     }
 
     try {
       const formData = new FormData();
-      formData.append('pdf', selectedFile);
+      selectedFiles.forEach((file) => {
+        formData.append('pdfs', file);
+      });
 
       const token = localStorage.getItem('token');
 
@@ -115,31 +114,42 @@ function ServicePopup({ isOpen, toggleModal, usuarioId }) {
 
       if (!response.ok) {
         const errorData = await response.json();
-        console.error('Erro ao enviar arquivo:', errorData.error);
-        setErrorMessage('Erro ao enviar arquivo: ' + errorData.error);
+        console.error('Erro ao enviar arquivos:', errorData.error);
+        setErrorMessage('Erro ao enviar arquivos: ' + errorData.error);
         return;
       }
 
-      const { url } = await response.json();
-      console.log('Arquivo enviado com sucesso:', url);
+      const { urls } = await response.json();
+      console.log('Arquivos enviados com sucesso:', urls);
 
-      const servico = {
-        id_usuario: usuarioId,
-        tipo_servico: selectedCard,
-        forma_pagamento: paymentData.paymentMethod,
-        status_servico: 'pendente',
-        data_solicitacao: new Date().toISOString(),
-        file_pdf: url
-      };
+      // Agora cadastre o serviço com as URLs dos arquivos
+      const cadastroResponse = await fetch('http://localhost:3000/cadastrar-servico', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          id_usuario: usuarioId,
+          tipo_servico: selectedCard,
+          forma_pagamento: paymentData.paymentMethod,
+          status_servico: 'Pendente',
+          data_solicitacao: new Date().toISOString(),
+          file_pdfs: urls
+        })
+      });
 
-      const resultadoCadastro = await cadastrarServico(servico);
-      if (resultadoCadastro.success) {
-        console.log("Serviço cadastrado com sucesso!");
-        handleCloseClick();
-      } else {
-        console.error("Erro ao cadastrar serviço:", resultadoCadastro.message);
-        setErrorMessage("Erro ao cadastrar serviço: " + resultadoCadastro.message);
+      if (!cadastroResponse.ok) {
+        const errorData = await cadastroResponse.json();
+        console.error('Erro ao cadastrar serviço:', errorData.error);
+        setErrorMessage('Erro ao cadastrar serviço: ' + errorData.error);
+        return;
       }
+
+      const cadastroResult = await cadastroResponse.json();
+      console.log('Serviço cadastrado com sucesso:', cadastroResult);
+
+      handleCloseClick();
     } catch (error) {
       console.error("Erro ao finalizar o serviço:", error);
       setErrorMessage("Erro ao finalizar o serviço: " + error.message);
@@ -161,12 +171,11 @@ function ServicePopup({ isOpen, toggleModal, usuarioId }) {
     }));
   };
 
-  const handleFileSelect = async (file) => {
-    setSelectedFile(file);
-    setIsFileSelected(true);
+  const handleFileSelect = async (files) => {
+    setSelectedFiles(files);
     setStepData((prevData) => ({
       ...prevData,
-      2: { isFileSelected: true, file_pdf: file }
+      2: { isFileSelected: true, file_pdfs: files }
     }));
   };
 
@@ -184,7 +193,7 @@ function ServicePopup({ isOpen, toggleModal, usuarioId }) {
         );
         break;
       case 2:
-        setIsStepValid(isFileSelected);
+        setIsStepValid(selectedFiles.length > 0);
         break;
       case 3:
         setIsStepValid(paymentData.paymentMethod !== '');
@@ -197,7 +206,7 @@ function ServicePopup({ isOpen, toggleModal, usuarioId }) {
 
   useEffect(() => {
     validateStep(activeStep);
-  }, [selectedCard, informationData, paymentData, isFileSelected, activeStep]);
+  }, [selectedCard, informationData, paymentData, selectedFiles, activeStep]);
 
   if (!isOpen) return null;
 
@@ -240,7 +249,7 @@ function ServicePopup({ isOpen, toggleModal, usuarioId }) {
                     </ul>
                     <FileUpload
                       onFileSelect={handleFileSelect}
-                      selectedFile={stepData[2].file_pdf}
+                      selectedFiles={stepData[2].file_pdfs}
                     />
                   </div>
                 )}
@@ -257,7 +266,7 @@ function ServicePopup({ isOpen, toggleModal, usuarioId }) {
                     </ul>
                     <FileUpload
                       onFileSelect={handleFileSelect}
-                      selectedFile={stepData[2].file_pdf}
+                      selectedFiles={stepData[2].file_pdfs}
                     />
                   </div>
                 )}
@@ -273,7 +282,7 @@ function ServicePopup({ isOpen, toggleModal, usuarioId }) {
                     </ul>
                     <FileUpload
                       onFileSelect={handleFileSelect}
-                      selectedFile={stepData[2].file_pdf}
+                      selectedFiles={stepData[2].file_pdfs}
                     />
                   </div>
                 )}
@@ -288,7 +297,7 @@ function ServicePopup({ isOpen, toggleModal, usuarioId }) {
                     </ul>
                     <FileUpload
                       onFileSelect={handleFileSelect}
-                      selectedFile={stepData[2].file_pdf}
+                      selectedFiles={stepData[2].file_pdfs}
                     />
                   </div>
                 )}

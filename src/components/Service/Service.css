@@ -49,6 +49,7 @@
   height: 100vh;
   animation: fadeIn 0.5s ease-in-out;
   color: black;
+  overflow: hidden;
 }
 
 .modal-1-modal {
