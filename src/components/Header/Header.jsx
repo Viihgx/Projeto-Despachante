@@ -60,15 +60,19 @@ function Header({ userData }) {
     };
   }, [prevScrollPos]);
 
+  const handleNavigateHome = () => {
+    navigate('/home');
+  };
+
   return (
     <header className={`Header ${visible ? 'visible' : 'hidden'}`}>
-      <div style={{ flexShrink: 0 }}>
-        <h1 className="title-logo">Despacha+</h1>
+      <div style={{ flexShrink: 0 }} onClick={handleNavigateHome}>
+        <h1 className="logoTitle">Despacha+</h1>
       </div>
       <nav className='nav-bar'>
         <ul>
           <li>
-            <a href="#" className="Menu">Home</a>
+          <a href="#" className="navMenu" onClick={handleNavigateHome}>Home</a>
           </li>
           <li>
             <a href="#" className="Menu">Orçamento</a>
