@@ -13,17 +13,21 @@
 
 .servico-details-content {
   background-color: #fff;
-  padding: 20px;
-  border-radius: 5px;
+  padding: 30px;
+  border-radius: 10px;
   max-width: 600px;
   width: 100%;
-  max-height: 80%;
+  max-height: 90%;
   overflow-y: auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .servico-details-content h2 {
   color: #111c55;
   margin-top: 0;
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 24px;
 }
 
 .servico-details-content .text-status-servico {
@@ -34,7 +38,8 @@
 
 .servico-details-content p {
   color: #000;
-  margin: 5px 0;
+  margin: 10px 0;
+  font-size: 16px;
 }
 
 .servico-details-content textarea {
@@ -43,7 +48,9 @@
   padding: 10px;
   border-radius: 5px;
   margin-bottom: 10px;
+  border: 1px solid #ccc;
 }
+
 .status-container {
   display: flex;
   align-items: center;
@@ -57,7 +64,6 @@
   margin-right: 5px;
 }
 
-
 .download-container {
   display: flex;
   align-items: center;
@@ -66,9 +72,8 @@
   border: 1px solid #ccc;
   background-color: transparent;
   border-radius: 5px;
-  height: 35px;
   margin-top: 10px;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
 }
 
 .download-container a {
@@ -96,6 +101,7 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  transition: background-color 0.3s;
 }
 
 .servico-details-content .btn-enviar-msg:hover {
