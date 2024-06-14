@@ -66,9 +66,10 @@ function ServicosVisto() {
         {servicos.map((servico) => (
           <li key={servico.id} onClick={() => handleServicoClick(servico)}>
             <h3>{servico.tipo_servico}</h3>
-            <p>Nome: {servico.Usuarios ? servico.Usuarios.Nome : 'Nome não disponível'}</p>
+            <p>Nome: {servico.nome_completo || 'Nome não disponível'}</p>
             <p>ID Usuário: {servico.id_usuario}</p>
-            <p>
+            <p>ID Serviço: {servico.id}</p>
+            <p className='text-status-visto'>
               <strong>Status:</strong> 
               <span className="status-container" style={{ color: getStatusColor(servico.status_servico) }}>
                 <span className="status-indicator" style={{ backgroundColor: getStatusColor(servico.status_servico) }}></span>

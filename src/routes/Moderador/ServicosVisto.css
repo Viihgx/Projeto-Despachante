@@ -32,6 +32,12 @@
   color: #333;
 }
 
+.text-status-visto {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
 .outra-secao-container li a {
   display: inline-block;
   margin-top: 10px;

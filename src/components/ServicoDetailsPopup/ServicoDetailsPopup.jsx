@@ -82,8 +82,8 @@ function ServicoDetailsPopup({ servico, onClose, onUpdateStatus }) {
 
   const downloadButtonStyles = {
     backgroundColor: '#111c55',
-    width: '26%',
-    height: '40px',
+    width: '25%',
+    height: '30px',
     color: 'white',
     '&:hover': {
       backgroundColor: '#0e1543',
@@ -96,10 +96,13 @@ function ServicoDetailsPopup({ servico, onClose, onUpdateStatus }) {
         <CloseIcon style={{ cursor: 'pointer', marginBottom: '15px', width: '30px', height: '30px' }} onClick={onClose} />
         <h2>Detalhes do Serviço</h2>
         <p><strong>Tipo de Serviço:</strong> {servico.tipo_servico}</p>
-        <p><strong>Nome:</strong> {servico.Usuarios ? servico.Usuarios.Nome : 'Nome não disponível'}</p>
-        <p><strong>Email:</strong> {servico.Usuarios ? servico.Usuarios.Email_usuario : 'Email não disponível'}</p>
+        <p><strong>Nome Completo:</strong> {servico.nome_completo || 'Não disponível'}</p>
         <p><strong>ID Usuário:</strong> {servico.id_usuario}</p>
-        <p>
+        <p><strong>ID Serviço:</strong> {servico.id}</p>
+        <p><strong>Placa do Veículo:</strong> {servico.placa_do_veiculo || 'Não disponível'}</p>
+        <p><strong>Apelido do Veículo:</strong> {servico.apelido_do_veiculo || 'Não disponível'}</p>
+        <p><strong>Forma de Pagamento:</strong> {servico.forma_pagamento || 'Não disponível'}</p>
+        <p className='text-status-servico'>
           <strong>Status:</strong>
           <span className="status-container" style={{ color: getStatusColor(status) }}>
             <span className="status-indicator" style={{ backgroundColor: getStatusColor(status) }}></span>

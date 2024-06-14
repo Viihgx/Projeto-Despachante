@@ -317,6 +317,7 @@ app.post('/cadastrar-servico', authenticateToken, async (req, res) => {
 });
 
 // Rota para buscar dados específicos para o moderador
+// Rota para buscar dados específicos para o moderador
 app.get('/moderador/servicos', authenticateToken, async (req, res) => {
   try {
     if (!req.user.is_moderador) {
@@ -333,8 +334,11 @@ app.get('/moderador/servicos', authenticateToken, async (req, res) => {
         data_solicitacao,
         file_pdfs,
         id_usuario,
+        nome_completo,
+        placa_do_veiculo,
+        apelido_do_veiculo,
+        forma_pagamento,
         Usuarios (
-          Nome,
           Email_usuario
         )
       `)
@@ -351,6 +355,7 @@ app.get('/moderador/servicos', authenticateToken, async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
 
 // Rota para atualizar o status do serviço
 app.patch('/moderador/servicos/:id', authenticateToken, async (req, res) => {

@@ -37,7 +37,7 @@ function ServicosSolicitados() {
       }
       if (
         servico.tipo_servico.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (servico.Usuarios && servico.Usuarios.Nome.toLowerCase().includes(searchTerm.toLowerCase()))
+        (servico.nome_completo && servico.nome_completo.toLowerCase().includes(searchTerm.toLowerCase()))
       ) {
         return true;
       }
@@ -98,7 +98,7 @@ function ServicosSolicitados() {
         <label htmlFor="search">Pesquise: 
           <input
             type="text"
-            placeholder="Pesquisar por tipo de serviço ou nome do usuário"
+            placeholder="Pesquisar por tipo de serviço ou nome completo"
             value={searchTerm}
             onChange={handleSearchChange}
           />
@@ -115,9 +115,10 @@ function ServicosSolicitados() {
         {filteredServicos.map((servico) => (
           <li key={servico.id} onClick={() => handleServicoClick(servico)}>
             <h3>{servico.tipo_servico}</h3>
-            <p>Nome: {servico.Usuarios ? servico.Usuarios.Nome : 'Nome não disponível'}</p>
+            <p>Nome: {servico.nome_completo || 'Nome não disponível'}</p>
             <p>ID Usuário: {servico.id_usuario}</p>
-            <p>
+            <p>ID Serviço: {servico.id}</p>
+            <p className='text-status-solicitacao'>
               <strong>Status:</strong> 
               <span className="status-container" style={{ color: getStatusColor(servico.status_servico) }}>
                 <span className="status-indicator" style={{ backgroundColor: getStatusColor(servico.status_servico) }}></span>
