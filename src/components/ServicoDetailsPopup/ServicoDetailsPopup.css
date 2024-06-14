@@ -64,6 +64,10 @@
   margin-right: 5px;
 }
 
+hr.new1 {
+  border-top: 1px solid rgb(130, 130, 130);
+}
+
 .download-container {
   display: flex;
   align-items: center;
