@@ -11,6 +11,72 @@
   margin: 20px;
 }
 
+.filter-container {
+  margin-bottom: 20px;
+}
+
+.filter-status {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 10px;
+  width: 55%;
+}
+
+.filter-status span {
+  margin-right: 15px;
+  cursor: pointer;
+  padding-bottom: 5px;
+}
+
+.filter-status span.active {
+  border-bottom: 2px solid var(--cor-secundaria-yellow);
+  font-weight: bold;
+}
+
+.filter-search {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 25px;
+}
+
+.search-container {
+  display: flex;
+  align-items: center;
+}
+
+.search-button {
+  background-color: var(--cor-secundaria-yellow);
+  border: none;
+  padding: 8px;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  height: 34px;
+}
+
+.search-container {
+  width: 35%;
+}
+
+.filter-search .input-search {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+  border-left: none;
+  margin-right: 10px;
+  width: 100%;
+}
+
+.filter-search select {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
 .servicos-list {
   margin: 20px 0;
 }
