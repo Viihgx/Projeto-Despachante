@@ -15,25 +15,28 @@ const mock = [
     "descricao": "Perda, roubo ou rasura de documentação ou transferência podem acontecer, porém, não precisa se preocupar, é possível emitir uma segunda via."
   },
   {
-    "title": "Transferência de veículos",
+    "title": "Transferência Veicular",
     "descricao": "Na hora de comprar ou vender um veículo usado, ou de mudar o local de registro do veículo, será necessário realizar a transferência de veículo."
   },
 ]
 
 function Card() {
   return (
-    <div className='container-cards'>
-    {mock.map(({ title, descricao }, index) => (
-      <div key={index} className="card-home">
-         <div className="circle">
-          <img className='img-icon' src={image} alt={title} />
+    <div className='box-card-component'>
+      <h4 className='text-title' style={{ color: "#fff" }}>Nossos Serviços</h4>
+      <div className='container-cards'>
+      {mock.map(({ title, descricao }, index) => (
+        <div key={index} className="card-home">
+          <div className="circle">
+            <img className='img-icon' src={image} alt={title} />
+          </div>
+          <div className="card-conteudo">
+            <h2 className='card-title'>{title}</h2>
+            <p className='text-p'>{descricao}</p>
+          </div>
         </div>
-        <div className="card-conteudo">
-          <h2 className='card-title'>{title}</h2>
-          <p className='text-p'>{descricao}</p>
-        </div>
-      </div>
-    ))}
+      ))}
+    </div>
   </div>
 );
 }

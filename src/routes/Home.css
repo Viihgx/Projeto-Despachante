@@ -72,7 +72,7 @@
 
 .text-title {
     color: var(--cor-primaria);
-    font-size: 2rem;
+    font-size: 2.5rem;
     font-weight: 600;
     margin: 0;
 }
@@ -97,8 +97,8 @@
     justify-content: center;
     background-color: var(--cor-primaria); 
     padding: 3rem 0; 
-    max-height: 500px; 
-    padding: 3rem 0;
+    max-height: 800px;
+    height: 800px;
 }
 
 .cards-container-main {
@@ -106,6 +106,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    gap: 30px;
 }
 
 .container-work div{
@@ -199,6 +200,22 @@
         padding: 0 10%; /* Reduza o preenchimento lateral para mais espaço */
     }
 
+    .cards-container {
+        display: flex;
+        justify-content: center;
+        padding: 3rem 0; 
+        max-height: 900px;
+        height: auto;
+    }
+    
+    .cards-container-main {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 30px;
+    }
+
     .parallax .overlay .parallax-title {
         font-size: 1.5rem;
     }
@@ -222,6 +239,14 @@
         font-size: 0.9rem; /* Ajuste o tamanho da fonte do parágrafo */
     }
 
+    .cards-container {
+        display: flex;
+        justify-content: center;
+        padding: 3rem 0; 
+        max-height: 950px;
+        height: auto;
+    }
+    
     .parallax .overlay .parallax-title {
         font-size: 1rem;
     }

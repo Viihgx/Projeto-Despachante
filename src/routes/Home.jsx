@@ -92,7 +92,7 @@ function Home() {
       <div className='container-master parallax-content'>
         <div className="cards-container">
           <div className="cards-container-main">
-            <h4 className='text-title' style={{ color: "#fff" }}>Nossos Serviços</h4>
+            
             <Card />
           </div>
         </div>
