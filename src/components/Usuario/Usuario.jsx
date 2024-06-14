@@ -5,6 +5,7 @@ import UserDados from './UserDados';
 import UserServicos from './UserServicos';
 import SidebarUser from './SidebarUser/SidebarUser';
 import EditPerfil from './EditPerfil/EditPerfil';
+import HeaderUser from '../Header/HeaderUser';
 
 function Usuario() {
   const [activeSection, setActiveSection] = useState('info');
@@ -37,17 +38,22 @@ function Usuario() {
   }, []);
 
   return (
-    <div className="usuario-container">
-      <SidebarUser activeSection={activeSection} setActiveSection={setActiveSection} />
-      <div className="content">
-        {activeSection === 'editar' ? (
-          <EditPerfil userData={userData} />
-        ) : (
-          <>
-            {activeSection === 'info' && <UserDados userData={userData} setActiveSection={setActiveSection} />}
-            {activeSection === 'servicos' && <UserServicos servicos={servicos} />}
-          </>
-        )}
+    <div className='container-user-master'>
+      <HeaderUser userData={userData} />
+      <div className="container-user">
+          <SidebarUser activeSection={activeSection} setActiveSection={setActiveSection} />
+        <div className="usuario-container">
+          <div className="content">
+            {activeSection === 'editar' ? (
+              <EditPerfil userData={userData} />
+            ) : (
+              <>
+                {activeSection === 'info' && <UserDados userData={userData} setActiveSection={setActiveSection} />}
+                {activeSection === 'servicos' && <UserServicos servicos={servicos} />}
+              </>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );
