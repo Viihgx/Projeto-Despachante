@@ -14,12 +14,12 @@
   .servico-popup-content {
     background-color: #fff;
     padding: 20px;
-    border-radius: 8px;
-    max-width: 500px;
-    width: 100%;
+    border-radius: 5px;
+    width: 80%;
+    max-width: 600px;
+    max-height: 80%;
+    overflow-y: auto;
     position: relative;
-    overflow-y: auto; /* Add scroll if content overflows */
-    max-height: 90vh;
   }
 
   .servico-popup-content p,h2 {

@@ -10,7 +10,8 @@ function ServicoUserPopup({ servico, onClose }) {
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {
-    console.log('Serviço:', servico);
+    document.body.style.overflow = 'hidden'; // Disable scroll on body
+
     if (servico.file_pdfs) {
       try {
         const parsedPdfs = JSON.parse(servico.file_pdfs);
@@ -24,7 +25,6 @@ function ServicoUserPopup({ servico, onClose }) {
       }
     }
 
-    // Fetch messages related to the service
     const fetchMessages = async () => {
       try {
         const token = localStorage.getItem('token');
@@ -45,6 +45,10 @@ function ServicoUserPopup({ servico, onClose }) {
     };
 
     fetchMessages();
+
+    return () => {
+      document.body.style.overflow = 'auto'; // Re-enable scroll on body when popup is closed
+    };
   }, [servico]);
 
   const handleFileChange = (index, event) => {
@@ -109,22 +113,24 @@ function ServicoUserPopup({ servico, onClose }) {
       <div className="servico-popup-content">
         <CloseIcon className="close-icon" onClick={onClose} />
         <h2>Detalhes do Serviço</h2>
-        <p><strong>Tipo de Serviço:</strong> {servico.tipo_servico}</p>
-        <p><strong>Forma de Pagamento:</strong> {servico.forma_pagamento}</p>
-        <p>
-          <strong>Status:</strong>
-          <span
-            className="status"
-            style={{ color: getStatusColor(servico.status_servico) }}
-          >
+        <div className="servico-details">
+          <p><strong>Tipo de Serviço:</strong> {servico.tipo_servico}</p>
+          <p><strong>Forma de Pagamento:</strong> {servico.forma_pagamento}</p>
+          <p>
+            <strong>Status:</strong>
             <span
-              className="status-indicator"
-              style={{ backgroundColor: getStatusColor(servico.status_servico) }}
-            ></span>
-            {servico.status_servico}
-          </span>
-        </p>
-        <p><strong>Data da Solicitação:</strong> {new Date(servico.data_solicitacao).toLocaleString()}</p>
+              className="status"
+              style={{ color: getStatusColor(servico.status_servico) }}
+            >
+              <span
+                className="status-indicator"
+                style={{ backgroundColor: getStatusColor(servico.status_servico) }}
+              ></span>
+              {servico.status_servico}
+            </span>
+          </p>
+          <p><strong>Data da Solicitação:</strong> {new Date(servico.data_solicitacao).toLocaleString()}</p>
+        </div>
         <h3>Documentos:</h3>
         {filePdfs.length > 0 ? (
           filePdfs.map((file, index) => (

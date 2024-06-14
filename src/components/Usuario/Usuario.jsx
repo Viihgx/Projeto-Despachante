@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './Usuario.css';
-import Header from '../Header/Header';
-import { FaUser, FaTools } from 'react-icons/fa';
 import axios from 'axios';
 import UserDados from './UserDados';
 import UserServicos from './UserServicos';
+import SidebarUser from './SidebarUser/SidebarUser';
 
 function Usuario() {
   const [activeSection, setActiveSection] = useState('info');
@@ -37,24 +36,12 @@ function Usuario() {
   }, []);
 
   return (
-    <div>
-      <Header />
-      <div className='img-topo'>
-        <div className='desc'>Informações. Serviços</div>
-        <div className='page-name'>Perfil do Usuário</div>
+    <div className="usuario-container">
+      <SidebarUser activeSection={activeSection} setActiveSection={setActiveSection} />
+      <div className="content">
+        {activeSection === 'info' && <UserDados userData={userData} />}
+        {activeSection === 'servicos' && <UserServicos servicos={servicos} />}
       </div>
-      
-      <div className='navigation-icons'>
-        <div>
-          <FaUser onClick={() => setActiveSection('info')} />
-        </div>
-        <div>
-          <FaTools onClick={() => setActiveSection('servicos')} />
-        </div>
-      </div>
-
-      {activeSection === 'info' && <UserDados userData={userData} />}
-      {activeSection === 'servicos' && <UserServicos servicos={servicos} />}
     </div>
   );
 }
