@@ -429,7 +429,7 @@ app.get('/user-services', authenticateToken, async (req, res) => {
     const { id } = req.user;
     const { data: servicos, error } = await supabase
       .from('servicoSolicitado')
-      .select('*')
+      .select('*, nome_completo, placa_do_veiculo, apelido_do_veiculo, forma_pagamento')
       .eq('id_usuario', id);
 
     if (error) {
@@ -441,6 +441,8 @@ app.get('/user-services', authenticateToken, async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+
 
 // Rota para atualizar PDF (usuario)
 app.post('/update-pdf/:servicoId/:index', authenticateToken, upload.single('pdf'), async (req, res) => {

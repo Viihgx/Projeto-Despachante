@@ -115,7 +115,11 @@ function ServicoUserPopup({ servico, onClose }) {
         <h2>Detalhes do Serviço</h2>
         <div className="servico-details">
           <p><strong>Tipo de Serviço:</strong> {servico.tipo_servico}</p>
-          <p><strong>Forma de Pagamento:</strong> {servico.forma_pagamento}</p>
+          <p><strong>ID do Serviço:</strong> {servico.id}</p>
+          <p><strong>Nome Completo:</strong> {servico.nome_completo || 'Não disponível'}</p>
+          <p><strong>Placa do Veículo:</strong> {servico.placa_do_veiculo || 'Não disponível'}</p>
+          <p><strong>Apelido do Veículo:</strong> {servico.apelido_do_veiculo || 'Não disponível'}</p>
+          <p><strong>Forma de Pagamento:</strong> {servico.forma_pagamento || 'Não disponível'}</p>
           <p>
             <strong>Status:</strong>
             <span
