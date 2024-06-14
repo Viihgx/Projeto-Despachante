@@ -9,11 +9,11 @@ function UserDados({ userData, setActiveSection }) {
   return (
     <div className='info-usuario'>
       <div className='bv'>
-        Olá, <span className='title'>{userData?.Nome}</span>
+        <span>Olá, <span className='title'>{userData?.Nome}</span></span>
         <button className='edit-button' onClick={handleEditClick}>Editar</button>
       </div>
       <div className='section-dados'>
-        <h4 className='title-dados'>Dados</h4>
+        <h4 className='title-dados'>Suas Informações</h4>
         <div>
           <span className='nome'>Nome:</span> <span>{userData?.Nome}</span><br />
           <span className='email'>Email:</span> <span>{userData?.Email_usuario}</span><br />

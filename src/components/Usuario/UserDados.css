@@ -1,44 +1,126 @@
 .info-usuario {
   background-color: var(--cor-texto);
   box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+  padding: 20px;
 }
 
 .bv {
-    font-family: 'Epilogue', sans-serif;
+  font-family: 'Epilogue', sans-serif;
+  font-size: 1.2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 1px solid rgb(48, 48, 48);
+  padding-bottom: 3px;
+}
+
+.bv .title {
+  color: var(--cor-primaria);
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.bv .edit-button {
+  background-color: var(--cor-secundaria-yellow);
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.bv .edit-button:hover {
+  background-color: var(--cor-primaria);
+}
+
+.section-dados {
+  margin-top: 20px;
+}
+
+.section-dados h4 {
+  color: var(--cor-primaria);
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.section-dados span {
+  display: block;
+  font-family: 'Epilogue', sans-serif;
+  color: #777777;
+  font-size: 1.0rem;
+  margin: 5px 0;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .bv {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .bv .edit-button {
+    margin-top: 10px;
+  }
+
+  .section-dados h4 {
     font-size: 1.2rem;
-    display: inline-block;
-    margin: 20px;
-    border-bottom: 1px solid rgb(48, 48, 48);
-    padding-bottom: 3px;
   }
-  
-  .nome,
-  .email,
-  .endereco,
-  .contato {
-    font-family: 'Epilogue', sans-serif;
-    color: #777777;
-    font-size: 1.0rem;
-    margin: 20px;
+
+  .section-dados span {
+    font-size: 0.9rem;
   }
-  
-  .title {
-    color: var(--cor-primaria);
-    font-size: 1.5rem;
-    font-weight: 600;
-    margin: 0;
-  }
-  
-  .title-dados,
-  .title-veiculo,
-  .title-servico {
-    color: var(--cor-primaria);
-    font-size: 1.5rem;
-    font-weight: 600;
-    margin: 20px;
-  }
-  
+}
+
+@media (max-width: 576px) {
   .info-usuario {
-    padding: 20px;
+    padding: 10px;
   }
-  
+
+  .bv {
+    font-size: 1rem;
+  }
+
+  .bv .title {
+    font-size: 1.2rem;
+  }
+
+  .bv .edit-button {
+    padding: 8px 15px;
+  }
+
+  .section-dados h4 {
+    font-size: 1rem;
+  }
+
+  .section-dados span {
+    font-size: 0.8rem;
+  }
+}
+
+/* Responsividade para dispositivos móveis */
+@media (max-width: 400px) {
+  .bv {
+    font-size: 0.9rem;
+  }
+
+  .bv .title {
+    font-size: 1rem;
+  }
+
+  .bv .edit-button {
+    padding: 6px 10px;
+    font-size: 0.8rem;
+  }
+
+  .section-dados h4 {
+    font-size: 0.9rem;
+  }
+
+  .section-dados span {
+    font-size: 0.7rem;
+  }
+}
