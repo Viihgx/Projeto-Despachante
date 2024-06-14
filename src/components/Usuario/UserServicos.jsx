@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './UserServicos.css';
 import ServicoUserPopup from './PopupServicoUser/ServicoUserPopup';
 import { FaTrash } from 'react-icons/fa';
@@ -12,6 +12,10 @@ function UserServicos({ servicos }) {
   const [searchResults, setSearchResults] = useState(servicos);
   const [noResults, setNoResults] = useState(false);
 
+  useEffect(() => {
+    handleSearch();
+  }, [filterStatus, searchTerm, timeFilter]);
+
   const handleServicoClick = (servico) => {
     setSelectedServico(servico);
   };
@@ -24,7 +28,7 @@ function UserServicos({ servicos }) {
     const filtered = servicos.filter((servico) => {
       const matchesStatus = filterStatus === 'all' || servico.status_servico === filterStatus;
       const matchesSearchTerm = servico.tipo_servico.toLowerCase().includes(searchTerm.toLowerCase()) || servico.id.toString().includes(searchTerm);
-      // TODO: Implement time filter logic
+      // Implement time filter logic if needed
       return matchesStatus && matchesSearchTerm;
     });
     setSearchResults(filtered);
@@ -34,6 +38,21 @@ function UserServicos({ servicos }) {
   const handleKeyPress = (event) => {
     if (event.key === 'Enter') {
       handleSearch();
+    }
+  };
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'Concluído':
+        return '#28a745'; // verde
+      case 'Cancelado':
+        return '#dc3545'; // vermelho
+      case 'Em Andamento':
+        return '#007bff'; // azul
+      case 'Pendente':
+        return '#ffc107'; // amarelo
+      default:
+        return '#6c757d'; // cinza
     }
   };
 
@@ -55,7 +74,7 @@ function UserServicos({ servicos }) {
             <input
               className='input-search'
               type='text'
-              placeholder='Buscar por ID ou tipo de serviço'
+              placeholder='Buscar por ID do serviço ou tipo de serviço'
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               onKeyPress={handleKeyPress}
@@ -88,7 +107,12 @@ function UserServicos({ servicos }) {
                   <tr key={index} onClick={() => handleServicoClick(servico)}>
                     <td>{servico.tipo_servico}</td>
                     <td>{servico.forma_pagamento}</td>
-                    <td>{servico.status_servico}</td>
+                    <td>
+                      <span className="status-container" style={{ color: getStatusColor(servico.status_servico) }}>
+                        <span className="status-indicator" style={{ backgroundColor: getStatusColor(servico.status_servico) }}></span>
+                        {servico.status_servico}
+                      </span>
+                    </td>
                     <td>{new Date(servico.data_solicitacao).toLocaleDateString()}</td>
                   </tr>
                 ))}
