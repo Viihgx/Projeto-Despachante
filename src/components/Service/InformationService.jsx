@@ -4,7 +4,7 @@ import { Typography } from "@mui/material";
 import { Grid } from "@material-ui/core";
 
 const InformationService = ({ informationData, setInformationData, setIsStepValid }) => {
-    const { fullName, nameVeiculo, cpf, licensePlate } = informationData;
+    const { fullName, nameVeiculo, licensePlate } = informationData;
 
     const handleFullNameChange = (event) => {
         setInformationData(prevData => ({ ...prevData, fullName: event.target.value }));
@@ -14,14 +14,6 @@ const InformationService = ({ informationData, setInformationData, setIsStepVali
         setInformationData(prevData => ({ ...prevData, nameVeiculo: event.target.value }));
     };
 
-    const handleCPFChange = (event) => {
-        let inputCPF = event.target.value;
-        inputCPF = inputCPF.replace(/\D/g, '');
-        inputCPF = inputCPF.slice(0, 11);
-        inputCPF = inputCPF.replace(/^(\d{3})(\d{3})(\d{3})(\d{2})$/, '$1.$2.$3-$4');
-        setInformationData(prevData => ({ ...prevData, cpf: inputCPF }));
-    };
-
     const handleLicensePlateChange = (event) => {
         let inputLicensePlate = event.target.value.replace(/[^a-zA-Z0-9-]/g, '');
         inputLicensePlate = inputLicensePlate.slice(0, 8);
@@ -29,9 +21,9 @@ const InformationService = ({ informationData, setInformationData, setIsStepVali
     };
 
     useEffect(() => {
-        const isValid = fullName && nameVeiculo && cpf && licensePlate;
+        const isValid = fullName && nameVeiculo && licensePlate;
         setIsStepValid(isValid);
-    }, [fullName, nameVeiculo, cpf, licensePlate, setIsStepValid]);
+    }, [fullName, nameVeiculo, licensePlate, setIsStepValid]);
 
     return (
         <div style={{ marginBottom: "100px" }}>
@@ -42,15 +34,6 @@ const InformationService = ({ informationData, setInformationData, setIsStepVali
                         label="Nome Completo" 
                         value={fullName} 
                         onChange={handleFullNameChange} 
-                        fullWidth
-                        margin="normal" 
-                    />
-                </Grid>
-                <Grid item xs={6}>
-                    <TextField 
-                        label="CPF" 
-                        value={cpf} 
-                        onChange={handleCPFChange} 
                         fullWidth
                         margin="normal" 
                     />

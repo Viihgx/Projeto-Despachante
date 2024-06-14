@@ -10,6 +10,7 @@ import ImgComoTrabalhamos from '../assets/img/comoTrabalhamos.png';
 import ImgBox from '../assets/img/box.png';
 import ImgSecurity from '../assets/img/security.png';
 import MapComponent from '../api/Map';
+import { ToastContainer } from 'react-toastify';
 
 function Home() {
   const [data, setData] = useState(null);
@@ -135,6 +136,7 @@ function Home() {
         toggleModal={toggleServicePopup}
         usuarioId={userData?.ID || null} // Passando o usuarioId
       />
+      <ToastContainer />
     </div>
   );
 }

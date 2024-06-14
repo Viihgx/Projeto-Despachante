@@ -280,7 +280,15 @@ function validarSenha(senha) {
 
 // Rota para cadastrar serviço
 app.post('/cadastrar-servico', authenticateToken, async (req, res) => {
-  const { id_usuario, tipo_servico, forma_pagamento, status_servico, data_solicitacao, file_pdfs } = req.body;
+  const { id_usuario, tipo_servico, forma_pagamento, status_servico, data_solicitacao, file_pdfs, nome_completo, placa_do_veiculo, apelido_do_veiculo } = req.body;
+
+  // Validação para a placa do veículo
+  const placaMercosul = /^[A-Z]{3}[0-9][A-Z][0-9]{2}$/;
+  const placaAntiga = /^[A-Z]{3}[0-9]{4}$/;
+  
+  if (!placaMercosul.test(placa_do_veiculo) && !placaAntiga.test(placa_do_veiculo)) {
+    return res.status(400).json({ success: false, message: 'Placa do veículo inválida' });
+  }
 
   try {
     const { data: servico, error } = await supabase
@@ -291,7 +299,10 @@ app.post('/cadastrar-servico', authenticateToken, async (req, res) => {
         forma_pagamento,
         status_servico,
         data_solicitacao,
-        file_pdfs
+        file_pdfs,
+        nome_completo,
+        placa_do_veiculo,
+        apelido_do_veiculo
       });
 
     if (error) {
@@ -426,7 +437,7 @@ app.get('/user-services', authenticateToken, async (req, res) => {
   }
 });
 
-// Rota para atualizar PDF
+// Rota para atualizar PDF (usuario)
 app.post('/update-pdf/:servicoId/:index', authenticateToken, upload.single('pdf'), async (req, res) => {
   const { servicoId, index } = req.params;
   const file = req.file;

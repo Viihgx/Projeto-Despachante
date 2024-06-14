@@ -11,6 +11,9 @@ import FileUpload from "../FileUpload/FileUpload";
 import CardService from "../Cards/CardService/CardService";
 import InformationService from "./InformationService";
 import PaymentForm from "./PaymentForm";
+import cadastrarServico from '../../Data/Crud';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const steps = ['Selecionar Serviço', 'Preencher informações', 'Enviar documento', 'Concluir'];
 
@@ -20,7 +23,6 @@ function ServicePopup({ isOpen, toggleModal, usuarioId }) {
   const [informationData, setInformationData] = useState({
     fullName: '',
     nameVeiculo: '',
-    cpf: '',
     licensePlate: ''
   });
   const [paymentData, setPaymentData] = useState({
@@ -60,7 +62,6 @@ function ServicePopup({ isOpen, toggleModal, usuarioId }) {
     setInformationData({
       fullName: '',
       nameVeiculo: '',
-      cpf: '',
       licensePlate: ''
     });
     setPaymentData({
@@ -122,32 +123,35 @@ function ServicePopup({ isOpen, toggleModal, usuarioId }) {
       const { urls } = await response.json();
       console.log('Arquivos enviados com sucesso:', urls);
 
-      // Agora cadastre o serviço com as URLs dos arquivos
-      const cadastroResponse = await fetch('http://localhost:3000/cadastrar-servico', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          id_usuario: usuarioId,
-          tipo_servico: selectedCard,
-          forma_pagamento: paymentData.paymentMethod,
-          status_servico: 'Pendente',
-          data_solicitacao: new Date().toISOString(),
-          file_pdfs: urls
-        })
+      // Agora cadastre o serviço com as URLs dos arquivos e novas informações
+      const cadastroResponse = await cadastrarServico({
+        id_usuario: usuarioId,
+        tipo_servico: selectedCard,
+        forma_pagamento: paymentData.paymentMethod,
+        status_servico: 'Pendente',
+        data_solicitacao: new Date().toISOString(),
+        file_pdfs: urls,
+        nome_completo: informationData.fullName,
+        placa_do_veiculo: informationData.licensePlate,
+        apelido_do_veiculo: informationData.nameVeiculo
       });
 
-      if (!cadastroResponse.ok) {
-        const errorData = await cadastroResponse.json();
-        console.error('Erro ao cadastrar serviço:', errorData.error);
-        setErrorMessage('Erro ao cadastrar serviço: ' + errorData.error);
+      if (!cadastroResponse.success) {
+        console.error('Erro ao cadastrar serviço:', cadastroResponse.message);
+        setErrorMessage('Erro ao cadastrar serviço: ' + cadastroResponse.message);
         return;
       }
 
-      const cadastroResult = await cadastroResponse.json();
-      console.log('Serviço cadastrado com sucesso:', cadastroResult);
+      console.log('Serviço cadastrado com sucesso:', cadastroResponse);
+      toast.success('Serviço cadastrado com sucesso!', {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
 
       handleCloseClick();
     } catch (error) {
@@ -187,7 +191,6 @@ function ServicePopup({ isOpen, toggleModal, usuarioId }) {
       case 1:
         setIsStepValid(
           informationData.fullName !== '' &&
-          informationData.cpf !== '' &&
           informationData.nameVeiculo !== '' &&
           informationData.licensePlate !== ''
         );

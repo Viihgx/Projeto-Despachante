@@ -18,7 +18,7 @@ function SidebarUser({ activeSection, setActiveSection }) {
         onClick={() => setActiveSection('servicos')}
       >
         <FaTools />
-        <span>Serviços</span>
+        <span>Meus Serviços</span>
       </div>
       <div 
         className={`sidebar-user-item ${activeSection === 'editar' ? 'active' : ''}`} 
