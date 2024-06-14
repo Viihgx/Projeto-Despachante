@@ -110,6 +110,7 @@ function ServicoDetailsPopup({ servico, onClose, onUpdateStatus }) {
           </span>
         </p>
         <p><strong>Data Solicitação:</strong> {new Date(servico.data_solicitacao).toLocaleString()}</p>
+        <hr className='new1'/>
         <h3>Documentos:</h3>
         {filePdfs.length > 0 ? (
           filePdfs.map((file, index) => (

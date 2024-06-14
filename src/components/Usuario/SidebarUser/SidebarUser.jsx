@@ -1,6 +1,9 @@
 import React from 'react';
 import './SidebarUser.css';
-import { FaUser, FaTools, FaEdit } from 'react-icons/fa';
+import PersonIcon from '@mui/icons-material/Person';
+import HandymanIcon from '@mui/icons-material/Handyman';
+import ModeEditIcon from '@mui/icons-material/ModeEdit';
+import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 
 function SidebarUser({ activeSection, setActiveSection }) {
   return (
@@ -10,22 +13,29 @@ function SidebarUser({ activeSection, setActiveSection }) {
         className={`sidebar-user-item ${activeSection === 'info' ? 'active' : ''}`} 
         onClick={() => setActiveSection('info')}
       >
-        <FaUser />
+        <PersonIcon />
         <span>Informações</span>
       </div>
       <div 
         className={`sidebar-user-item ${activeSection === 'servicos' ? 'active' : ''}`} 
         onClick={() => setActiveSection('servicos')}
       >
-        <FaTools />
+        <HandymanIcon />
         <span>Meus Serviços</span>
       </div>
       <div 
         className={`sidebar-user-item ${activeSection === 'editar' ? 'active' : ''}`} 
         onClick={() => setActiveSection('editar')}
       >
-        <FaEdit />
+        <ModeEditIcon />
         <span>Editar Perfil</span>
+      </div>
+      <div 
+        className={`sidebar-user-item ${activeSection === 'veiculos' ? 'active' : ''}`} 
+        onClick={() => setActiveSection('veiculos')}
+      >
+        <DirectionsCarIcon />
+        <span>Meus Veículos</span>
       </div>
     </div>
   );

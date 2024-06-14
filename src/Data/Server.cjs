@@ -381,47 +381,49 @@ app.patch('/moderador/servicos/:id', authenticateToken, async (req, res) => {
   }
 });
 
-// Rota para adicionar um novo veículo do usuário
+//rota para addicionar carro
 app.post('/add-vehicle', authenticateToken, async (req, res) => {
-  const { Placa_do_veiculo, Tipo_de_veiculo } = req.body;
-  const { id } = req.user;
+  const { placa_veiculo, nome_veiculo } = req.body;
+  const { id: usuario_id } = req.user;
 
   try {
     const { data, error } = await supabase
       .from('Veiculos')
-      .insert({ usuario_id: id, Placa_do_veiculo, Tipo_de_veiculo });
+      .insert({ usuario_id, placa_veiculo, nome_veiculo });
 
     if (error) {
-      throw new Error('Erro ao adicionar veículo do usuário');
+      console.error('Erro ao inserir no Supabase:', error); // Log do erro do Supabase
+      return res.status(500).json({ success: false, error: error.message });
     }
 
-    res.json({ success: true, veiculo: data[0] });
+    console.log('Veículo adicionado com sucesso:', data);
+    res.status(201).json({ success: true, veiculo: data[0] });
   } catch (error) {
-    res.status(403).json({ success: false, error: error.message });
+    console.error('Erro ao adicionar veículo:', error.message);
+    res.status(500).json({ success: false, error: error.message });
   }
 });
 
-// Rota para remover um veículo do usuário
-app.delete('/delete-vehicle/:placa', authenticateToken, async (req, res) => {
-  const { placa } = req.params;
-  const { id } = req.user;
+// Rota para buscar veículos do usuário
+app.get('/user-vehicles', authenticateToken, async (req, res) => {
+  const { id: usuario_id } = req.user;
 
   try {
-    const { data, error } = await supabase
+    const { data: veiculos, error } = await supabase
       .from('Veiculos')
-      .delete()
-      .eq('usuario_id', id)
-      .eq('Placa_do_veiculo', placa);
+      .select('*')
+      .eq('usuario_id', usuario_id);
 
     if (error) {
-      throw new Error('Erro ao remover veículo');
+      throw new Error(error.message);
     }
 
-    res.json({ success: true, message: 'Veículo removido com sucesso' });
+    res.json({ success: true, veiculos });
   } catch (error) {
-    res.status(403).json({ success: false, error: error.message });
+    res.status(500).json({ success: false, error: error.message });
   }
 });
+
 
 // Rota para buscar serviços do usuário
 app.get('/user-services', authenticateToken, async (req, res) => {
@@ -441,8 +443,6 @@ app.get('/user-services', authenticateToken, async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-
-
 
 // Rota para atualizar PDF (usuario)
 app.post('/update-pdf/:servicoId/:index', authenticateToken, upload.single('pdf'), async (req, res) => {
@@ -607,7 +607,7 @@ app.put('/update-profile', authenticateToken, async (req, res) => {
   }
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3002;
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });
