@@ -1,19 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import './UserServicos.css';
 import ServicoUserPopup from './PopupServicoUser/ServicoUserPopup';
-import { FaTrash, FaSearch } from 'react-icons/fa';
+import { FaTrash, FaSearch, FaFilter } from 'react-icons/fa';
 
 function UserServicos({ servicos }) {
   const [selectedServico, setSelectedServico] = useState(null);
   const [filterStatus, setFilterStatus] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
-  const [timeFilter, setTimeFilter] = useState('all-time');
-  const [searchResults, setSearchResults] = useState(servicos);
+  const [timeFilter, setTimeFilter] = useState('oldest-first');
+  const [searchResults, setSearchResults] = useState([]);
   const [noResults, setNoResults] = useState(false);
 
   useEffect(() => {
     handleSearch();
   }, [filterStatus, searchTerm, timeFilter]);
+
+  useEffect(() => {
+    handleSearch();
+  }, [servicos]);
 
   const handleServicoClick = (servico) => {
     setSelectedServico(servico);
@@ -24,12 +28,18 @@ function UserServicos({ servicos }) {
   };
 
   const handleSearch = () => {
-    const filtered = servicos.filter((servico) => {
+    let filtered = servicos.filter((servico) => {
       const matchesStatus = filterStatus === 'all' || servico.status_servico === filterStatus;
       const matchesSearchTerm = servico.tipo_servico.toLowerCase().includes(searchTerm.toLowerCase()) || servico.id.toString().includes(searchTerm);
-      // Implement time filter logic if needed
       return matchesStatus && matchesSearchTerm;
     });
+
+    if (timeFilter === 'most-recent') {
+      filtered = filtered.sort((a, b) => new Date(b.data_solicitacao) - new Date(a.data_solicitacao));
+    } else if (timeFilter === 'oldest-first') {
+      filtered = filtered.sort((a, b) => new Date(a.data_solicitacao) - new Date(b.data_solicitacao));
+    }
+
     setSearchResults(filtered);
     setNoResults(filtered.length === 0);
   };
@@ -79,12 +89,13 @@ function UserServicos({ servicos }) {
               onKeyPress={handleKeyPress}
             />
           </div>
-          <select value={timeFilter} onChange={(e) => setTimeFilter(e.target.value)}>
-            <option value='all-time'>Todo tempo</option>
-            <option value='last-6-months'>Últimos 6 meses</option>
-            <option value='last-1-year'>Último 1 ano</option>
-            <option value='last-2-years'>Últimos 2 anos</option>
-          </select>
+          <div className='select-container'>
+            <FaFilter className='filter-icon' />
+            <select value={timeFilter} onChange={(e) => setTimeFilter(e.target.value)}>
+              <option value='most-recent'>Mais novo</option>
+              <option value='oldest-first'>Mais antigo</option>
+            </select>
+          </div>
         </div>
       </div>
       <div className='servicos-list'>
@@ -97,14 +108,12 @@ function UserServicos({ servicos }) {
                 <div className="servico-info-row">
                   <strong>ID do Serviço:</strong>
                   <strong>Tipo de Serviço:</strong>
-                  {/* <strong>Forma de Pagamento:</strong> */}
                   <strong>Status:</strong>
                   <strong>Data da Solicitação:</strong>
                 </div>
                 <div className="servico-info-row">
                   <p>{servico.id}</p>
                   <p>{servico.tipo_servico}</p>
-                  {/* <p>{servico.forma_pagamento}</p> */}
                   <p>
                     <span className="status-container" style={{ color: getStatusColor(servico.status_servico) }}>
                       <span className="status-indicator" style={{ backgroundColor: getStatusColor(servico.status_servico) }}></span>

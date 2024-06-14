@@ -37,8 +37,8 @@ body {
 
 .filter-status {
   display: flex;
-  justify-content: space-around;
-  margin-bottom: 10px;
+  justify-content: space-evenly;
+  margin-bottom: 20px;
 }
 
 .filter-status span {
@@ -54,16 +54,17 @@ body {
 
 .filter-search {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  padding: 0 22px;
 }
 
 .search-container {
   display: flex;
   align-items: center;
   margin-bottom: 10px;
-  width: 100%;
+  width: 49%;
 }
 
 .search-button {
@@ -97,6 +98,32 @@ body {
   padding: 8px;
   border: 1px solid #ddd;
   border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+.select-container {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.filter-icon {
+  position: absolute;
+  left: 10px;
+  pointer-events: none;
+  margin-bottom: 10px;
+}
+
+.select-container select {
+  padding: 8px 12px 8px 32px; /* Ajuste o padding para acomodar o ícone */
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #fff;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
+  font-size: 14px;
 }
 
 .servicos-list {
