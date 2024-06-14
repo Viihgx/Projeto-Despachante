@@ -29,3 +29,21 @@
 // }
 
 // inserirUsuario();
+
+// Requer as dependências necessárias
+// require('dotenv').config();
+// const bcrypt = require('bcrypt');
+
+// async function gerarHashSenha(senha) {
+//   try {
+//     // Gera o hash da senha
+//     const hashedPassword = await bcrypt.hash(senha, 10);
+//     console.log('Hash da senha:', hashedPassword);
+//   } catch (error) {
+//     console.error('Erro ao gerar o hash da senha:', error.message);
+//   }
+// }
+
+// // Substitua 'suaSenhaAqui' pela senha que deseja hash
+// const senha = 'Vitoria123!';
+// gerarHashSenha(senha);

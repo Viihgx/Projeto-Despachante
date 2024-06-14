@@ -1,0 +1,67 @@
+.edit-perfil-container {
+  padding: 20px;
+  background-color: var(--cor-texto);
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  margin-top: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 90vh;
+  }
+  
+  .form-perfil {
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+    padding: 20px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.form-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.btn-submit, .btn-cancel {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-submit {
+  background-color: var(--cor-primaria);
+  color: white;
+}
+
+.btn-cancel {
+  background-color: #ccc;
+  color: black;
+}
+
+.btn-cancel:hover {
+  background-color: #bbb;
+}
+
+.btn-submit:hover {
+  background-color: var(--cor-secundaria-yellow);
+}

@@ -1,6 +1,6 @@
 import React from 'react';
 import './SidebarUser.css';
-import { FaUser, FaTools } from 'react-icons/fa';
+import { FaUser, FaTools, FaEdit } from 'react-icons/fa';
 
 function SidebarUser({ activeSection, setActiveSection }) {
   return (
@@ -19,6 +19,13 @@ function SidebarUser({ activeSection, setActiveSection }) {
       >
         <FaTools />
         <span>Serviços</span>
+      </div>
+      <div 
+        className={`sidebar-user-item ${activeSection === 'editar' ? 'active' : ''}`} 
+        onClick={() => setActiveSection('editar')}
+      >
+        <FaEdit />
+        <span>Editar Perfil</span>
       </div>
     </div>
   );

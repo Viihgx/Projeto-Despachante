@@ -530,7 +530,64 @@ app.get('/messages/:servicoId', authenticateToken, async (req, res) => {
   }
 });
 
+// Rota para editar perfil
+app.put('/update-profile', authenticateToken, async (req, res) => {
+  const { nome, email, endereco, placa_veiculo, numero_celular, senhaAtual } = req.body;
+  const { id } = req.user;
 
+  try {
+    // Verifique a senha atual
+    const { data: usuario, error: userError } = await supabase
+      .from('Usuarios')
+      .select('Senha_usuario')
+      .eq('ID', id)
+      .single();
+
+    if (userError || !usuario) {
+      throw new Error('Usuário não encontrado');
+    }
+
+    if (!senhaAtual) {
+      return res.status(400).json({ success: false, message: 'Senha atual é obrigatória' });
+    }
+
+    const senhaValida = await bcrypt.compare(senhaAtual, usuario.Senha_usuario);
+
+    if (!senhaValida) {
+      return res.status(401).json({ success: false, message: 'Senha atual incorreta' });
+    }
+
+    // Atualizar os dados do usuário no banco de dados
+    let updateData = {
+      Nome: nome,
+      Email_usuario: email,
+      Endereco: endereco,
+      Placa_do_veiculo: placa_veiculo,
+      Numero_celular: numero_celular
+    };
+
+    const { data, error } = await supabase
+      .from('Usuarios')
+      .update(updateData)
+      .eq('ID', id)
+      .select(); // Certifique-se de selecionar os dados atualizados
+
+    if (error) {
+      console.error('Erro ao atualizar perfil no Supabase:', error.message);
+      throw new Error('Erro ao atualizar perfil');
+    }
+
+    if (!data || data.length === 0) {
+      console.error('Nenhum usuário atualizado');
+      throw new Error('Erro ao atualizar perfil');
+    }
+
+    res.json({ success: true, message: 'Perfil atualizado com sucesso', user: data[0] });
+  } catch (error) {
+    console.error('Erro ao atualizar perfil:', error.message);
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

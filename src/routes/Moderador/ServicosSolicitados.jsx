@@ -9,9 +9,8 @@ function ServicosSolicitados() {
   const [selectedServico, setSelectedServico] = useState(null);
   const [error, setError] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState(''); // Estado inicial vazio
+  const [statusFilter, setStatusFilter] = useState('');
 
-  // Função para buscar os serviços
   const fetchServicos = async () => {
     try {
       const token = localStorage.getItem('token');
@@ -20,7 +19,7 @@ function ServicosSolicitados() {
       });
       console.log('Resposta da API:', response.data);
       setServicos(response.data.servicos);
-      setFilteredServicos(response.data.servicos); // Inicialmente, filtramos todos os serviços
+      setFilteredServicos(response.data.servicos);
     } catch (error) {
       console.error('Erro ao buscar serviços:', error);
       setError('Erro ao buscar serviços');
@@ -31,14 +30,11 @@ function ServicosSolicitados() {
     fetchServicos();
   }, []);
 
-  // Filtrar serviços com base no termo de pesquisa e no filtro de status
   useEffect(() => {
     let filteredList = servicos.filter((servico) => {
-      // Filtrar por status, se houver filtro selecionado
       if (statusFilter && servico.status_servico !== statusFilter) {
         return false;
       }
-      // Filtrar por termo de pesquisa no tipo de serviço ou nome do usuário
       if (
         servico.tipo_servico.toLowerCase().includes(searchTerm.toLowerCase()) ||
         (servico.Usuarios && servico.Usuarios.Nome.toLowerCase().includes(searchTerm.toLowerCase()))
@@ -79,6 +75,21 @@ function ServicosSolicitados() {
     );
   };
 
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'Concluído':
+        return '#28a745'; // verde
+      case 'Cancelado':
+        return '#dc3545'; // vermelho
+      case 'Em Andamento':
+        return '#007bff'; // azul
+      case 'Pendente':
+        return '#ffc107'; // amarelo
+      default:
+        return '#6c757d'; // cinza
+    }
+  };
+
   return (
     <div className="servicos-solicitados-container">
       <h2>Todos os Serviços Solicitados</h2>
@@ -106,7 +117,13 @@ function ServicosSolicitados() {
             <h3>{servico.tipo_servico}</h3>
             <p>Nome: {servico.Usuarios ? servico.Usuarios.Nome : 'Nome não disponível'}</p>
             <p>ID Usuário: {servico.id_usuario}</p>
-            <p>Status: {servico.status_servico}</p>
+            <p>
+              <strong>Status:</strong> 
+              <span className="status-container" style={{ color: getStatusColor(servico.status_servico) }}>
+                <span className="status-indicator" style={{ backgroundColor: getStatusColor(servico.status_servico) }}></span>
+                {servico.status_servico}
+              </span>
+            </p>
             <p>Data Solicitação: {new Date(servico.data_solicitacao).toLocaleString()}</p>
           </li>
         ))}

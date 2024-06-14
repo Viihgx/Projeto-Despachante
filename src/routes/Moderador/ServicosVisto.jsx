@@ -8,7 +8,6 @@ function ServicosVisto() {
   const [selectedServico, setSelectedServico] = useState(null);
   const [error, setError] = useState('');
 
-  // Função para buscar os serviços
   const fetchServicos = async () => {
     try {
       const token = localStorage.getItem('token');
@@ -44,6 +43,21 @@ function ServicosVisto() {
     );
   };
 
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'Concluído':
+        return '#28a745'; // verde
+      case 'Cancelado':
+        return '#dc3545'; // vermelho
+      case 'Em Andamento':
+        return '#007bff'; // azul
+      case 'Pendente':
+        return '#ffc107'; // amarelo
+      default:
+        return '#6c757d'; // cinza
+    }
+  };
+
   return (
     <div className="outra-secao-container">
       <h2>Todos os Serviços em Andamento</h2>
@@ -54,7 +68,13 @@ function ServicosVisto() {
             <h3>{servico.tipo_servico}</h3>
             <p>Nome: {servico.Usuarios ? servico.Usuarios.Nome : 'Nome não disponível'}</p>
             <p>ID Usuário: {servico.id_usuario}</p>
-            <p>Status: {servico.status_servico}</p>
+            <p>
+              <strong>Status:</strong> 
+              <span className="status-container" style={{ color: getStatusColor(servico.status_servico) }}>
+                <span className="status-indicator" style={{ backgroundColor: getStatusColor(servico.status_servico) }}></span>
+                {servico.status_servico}
+              </span>
+            </p>
             <p>Data Solicitação: {new Date(servico.data_solicitacao).toLocaleString()}</p>
           </li>
         ))}

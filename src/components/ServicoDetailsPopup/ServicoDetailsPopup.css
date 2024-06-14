@@ -27,7 +27,7 @@
 }
 
 .servico-details-content p {
-  color: #666;
+  color: #000;
   margin: 5px 0;
 }
 
@@ -38,6 +38,19 @@
   border-radius: 5px;
   margin-bottom: 10px;
 }
+.status-container {
+  display: flex;
+  align-items: center;
+}
+
+.status-indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 5px;
+}
+
 
 .download-container {
   display: flex;

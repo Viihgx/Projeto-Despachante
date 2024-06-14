@@ -86,33 +86,42 @@
   margin: 20px 0;
 }
 
-.servicos-list table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.servicos-list th, .servicos-list td {
-  border: 1px solid #ddd;
-  padding: 8px;
-}
-
-.servicos-list th {
-  background-color: #f2f2f2;
-  text-align: left;
-}
-
-.servicos-list tr:nth-child(even) {
-  background-color: #f9f9f9;
-}
-
-.servicos-list tr:hover {
-  background-color: #f1f1f1;
+.servico-card {
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin-bottom: 10px;
   cursor: pointer;
+}
+
+.servico-card:hover {
+  background-color: #f1f1f1;
+}
+
+.servico-info-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.servico-info-row strong {
+  color: var(--cor-primaria);
+  flex: 1;
+  text-align: center;
+}
+
+.servico-info-row p {
+  flex: 1;
+  text-align: center;
+  margin: 0;
+  color: var(--cor-texto-secundario);
 }
 
 .status-container {
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 
 .status-indicator {

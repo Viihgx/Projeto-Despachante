@@ -65,6 +65,21 @@ function ServicoDetailsPopup({ servico, onClose, onUpdateStatus }) {
     }
   };
 
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'Concluído':
+        return '#28a745'; // verde
+      case 'Cancelado':
+        return '#dc3545'; // vermelho
+      case 'Em Andamento':
+        return '#007bff'; // azul
+      case 'Pendente':
+        return '#ffc107'; // amarelo
+      default:
+        return '#6c757d'; // cinza
+    }
+  };
+
   const downloadButtonStyles = {
     backgroundColor: '#111c55',
     width: '26%',
@@ -84,7 +99,13 @@ function ServicoDetailsPopup({ servico, onClose, onUpdateStatus }) {
         <p><strong>Nome:</strong> {servico.Usuarios ? servico.Usuarios.Nome : 'Nome não disponível'}</p>
         <p><strong>Email:</strong> {servico.Usuarios ? servico.Usuarios.Email_usuario : 'Email não disponível'}</p>
         <p><strong>ID Usuário:</strong> {servico.id_usuario}</p>
-        <p><strong>Status:</strong> {status}</p>
+        <p>
+          <strong>Status:</strong>
+          <span className="status-container" style={{ color: getStatusColor(status) }}>
+            <span className="status-indicator" style={{ backgroundColor: getStatusColor(status) }}></span>
+            {status}
+          </span>
+        </p>
         <p><strong>Data Solicitação:</strong> {new Date(servico.data_solicitacao).toLocaleString()}</p>
         <h3>Documentos:</h3>
         {filePdfs.length > 0 ? (

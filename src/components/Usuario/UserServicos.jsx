@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './UserServicos.css';
 import ServicoUserPopup from './PopupServicoUser/ServicoUserPopup';
-import { FaTrash } from 'react-icons/fa';
-import { FaSearch } from 'react-icons/fa';
+import { FaTrash, FaSearch } from 'react-icons/fa';
 
 function UserServicos({ servicos }) {
   const [selectedServico, setSelectedServico] = useState(null);
@@ -93,31 +92,29 @@ function UserServicos({ servicos }) {
           <p>Nenhum resultado encontrado.</p>
         ) : (
           searchResults.length > 0 ? (
-            <table>
-              <thead>
-                <tr>
-                  <th>Tipo de Serviço</th>
-                  <th>Forma de Pagamento</th>
-                  <th>Status</th>
-                  <th>Data da Solicitação</th>
-                </tr>
-              </thead>
-              <tbody>
-                {searchResults.map((servico, index) => (
-                  <tr key={index} onClick={() => handleServicoClick(servico)}>
-                    <td>{servico.tipo_servico}</td>
-                    <td>{servico.forma_pagamento}</td>
-                    <td>
-                      <span className="status-container" style={{ color: getStatusColor(servico.status_servico) }}>
-                        <span className="status-indicator" style={{ backgroundColor: getStatusColor(servico.status_servico) }}></span>
-                        {servico.status_servico}
-                      </span>
-                    </td>
-                    <td>{new Date(servico.data_solicitacao).toLocaleDateString()}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            searchResults.map((servico, index) => (
+              <div key={index} className="servico-card" onClick={() => handleServicoClick(servico)}>
+                <div className="servico-info-row">
+                  <strong>ID do Serviço:</strong>
+                  <strong>Tipo de Serviço:</strong>
+                  {/* <strong>Forma de Pagamento:</strong> */}
+                  <strong>Status:</strong>
+                  <strong>Data da Solicitação:</strong>
+                </div>
+                <div className="servico-info-row">
+                  <p>{servico.id}</p>
+                  <p>{servico.tipo_servico}</p>
+                  {/* <p>{servico.forma_pagamento}</p> */}
+                  <p>
+                    <span className="status-container" style={{ color: getStatusColor(servico.status_servico) }}>
+                      <span className="status-indicator" style={{ backgroundColor: getStatusColor(servico.status_servico) }}></span>
+                      {servico.status_servico}
+                    </span>
+                  </p>
+                  <p>{new Date(servico.data_solicitacao).toLocaleDateString()}</p>
+                </div>
+              </div>
+            ))
           ) : (
             <p>Você não solicitou nenhum serviço ainda.</p>
           )

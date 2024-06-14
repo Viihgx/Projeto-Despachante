@@ -1,14 +1,26 @@
 import React from 'react';
 import './UserDados.css';
 
-function UserDados({ userData }) {
+function UserDados({ userData, setActiveSection }) {
+  const handleEditClick = () => {
+    setActiveSection('editar');
+  };
+
   return (
     <div className='info-usuario'>
-      <div className='bv'>olá, <span className='title'>{userData?.Nome}</span></div>
+      <div className='bv'>
+        Olá, <span className='title'>{userData?.Nome}</span>
+        <button className='edit-button' onClick={handleEditClick}>Editar</button>
+      </div>
       <div className='section-dados'>
         <h4 className='title-dados'>Dados</h4>
-        <span className='nome'>Nome:</span> <span>{userData?.Nome}</span><br />
-        <span className='email'>Email:</span> <span>{userData?.Email_usuario}</span><br />
+        <div>
+          <span className='nome'>Nome:</span> <span>{userData?.Nome}</span><br />
+          <span className='email'>Email:</span> <span>{userData?.Email_usuario}</span><br />
+          <span className='endereco'>Endereço:</span> <span>{userData?.Endereco || 'Não fornecido'}</span><br />
+          <span className='placa'>Placa do Veículo:</span> <span>{userData?.Placa_do_veiculo || 'Não fornecido'}</span><br />
+          <span className='celular'>Número de Celular:</span> <span>{userData?.Numero_celular || 'Não fornecido'}</span><br />
+        </div>
       </div>
     </div>
   );

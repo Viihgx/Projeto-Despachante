@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import './Usuario.css';
 import axios from 'axios';
+import './Usuario.css';
 import UserDados from './UserDados';
 import UserServicos from './UserServicos';
 import SidebarUser from './SidebarUser/SidebarUser';
+import EditPerfil from './EditPerfil/EditPerfil';
 
 function Usuario() {
   const [activeSection, setActiveSection] = useState('info');
@@ -39,8 +40,14 @@ function Usuario() {
     <div className="usuario-container">
       <SidebarUser activeSection={activeSection} setActiveSection={setActiveSection} />
       <div className="content">
-        {activeSection === 'info' && <UserDados userData={userData} />}
-        {activeSection === 'servicos' && <UserServicos servicos={servicos} />}
+        {activeSection === 'editar' ? (
+          <EditPerfil userData={userData} />
+        ) : (
+          <>
+            {activeSection === 'info' && <UserDados userData={userData} setActiveSection={setActiveSection} />}
+            {activeSection === 'servicos' && <UserServicos servicos={servicos} />}
+          </>
+        )}
       </div>
     </div>
   );
