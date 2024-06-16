@@ -92,7 +92,7 @@ function Login() {
     return (
         <div className="login-container">
             <form className="login-form" onSubmit={(e) => e.preventDefault()}>
-                <h2>Login</h2>
+                <h2 className='text-login'>Login</h2>
                 <CustomTextField
                     label="Email"
                     value={email}

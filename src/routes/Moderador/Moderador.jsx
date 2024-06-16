@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink, useRoutes, Navigate } from 'react-router-dom';
+import { NavLink, useRoutes, Navigate, useNavigate } from 'react-router-dom';
 import ServicosSolicitados from './ServicosSolicitados';
 import ServicoVisto from './ServicosVisto';
 import './Moderador.css';
@@ -10,6 +10,13 @@ function Moderador() {
     { path: '/servico-visto', element: <ServicoVisto /> },
     { path: '/', element: <Navigate to="servicos-solicitados" replace /> },
   ]);
+
+  const navigate = useNavigate(); // Hook useNavigate
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/');
+  };
 
   return (
     <div className="moderador-container">
@@ -33,6 +40,9 @@ function Moderador() {
             </NavLink>
           </li>
         </ul>
+        <button className="logout-button" onClick={handleLogout}>
+          Sair
+        </button>
       </div>
       <div className="content">
         {routes}

@@ -12,55 +12,61 @@ function Usuario() {
   const [activeSection, setActiveSection] = useState('info');
   const [userData, setUserData] = useState(null);
   const [servicos, setServicos] = useState([]);
-  const [veiculos, setVeiculos] = useState([]); // Adiciona o estado para os veículos
+  const [veiculos, setVeiculos] = useState([]);
+
+  const fetchUserData = async () => {
+    const token = localStorage.getItem('token');
+    const response = await axios.get('http://localhost:3000/protected-route', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    setUserData(response.data.user);
+  };
+
+  const fetchUserServices = async () => {
+    const token = localStorage.getItem('token');
+    const response = await axios.get('http://localhost:3000/user-services', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    setServicos(response.data.servicos);
+  };
+
+  const fetchUserVehicles = async () => {
+    const token = localStorage.getItem('token');
+    const response = await axios.get('http://localhost:3000/user-vehicles', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    setVeiculos(response.data.veiculos);
+  };
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      const token = localStorage.getItem('token');
-      try {
-        const response = await axios.get('http://localhost:3000/protected-route', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setUserData(response.data.user);
-      } catch (error) {
-        console.error('Erro ao buscar dados do usuário:', error);
-      }
-    };
-
-    const fetchUserServices = async () => {
-      const token = localStorage.getItem('token');
-      try {
-        const response = await axios.get('http://localhost:3000/user-services', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setServicos(response.data.servicos);
-      } catch (error) {
-        console.error('Erro ao buscar serviços do usuário:', error);
-      }
-    };
-
-    const fetchUserVehicles = async () => {
-      const token = localStorage.getItem('token');
-      try {
-        const response = await axios.get('http://localhost:3000/user-vehicles', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setVeiculos(response.data.veiculos);
-      } catch (error) {
-        console.error('Erro ao buscar veículos do usuário:', error);
-      }
-    };
-
     fetchUserData();
     fetchUserServices();
     fetchUserVehicles();
   }, []);
+
+  const handleDeleteVehicle = async (id) => {
+    const token = localStorage.getItem('token');
+    try {
+      const response = await axios.delete(`http://localhost:3000/delete-vehicle/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.data.success) {
+        setVeiculos((prev) => prev.filter((vehicle) => vehicle.id !== id));
+      } else {
+        console.error('Erro do backend:', response.data.error);
+      }
+    } catch (error) {
+      console.error('Erro ao remover veículo:', error);
+    }
+  };
 
   return (
     <div className='container-user-master'>
@@ -75,7 +81,13 @@ function Usuario() {
               <>
                 {activeSection === 'info' && <UserDados userData={userData} setActiveSection={setActiveSection} />}
                 {activeSection === 'servicos' && <UserServicos servicos={servicos} />}
-                {activeSection === 'veiculos' && <VeiculosUser veiculos={veiculos} setVeiculos={setVeiculos} />} {/* Passa os veículos e a função setVeiculos */}
+                {activeSection === 'veiculos' && (
+                  <VeiculosUser
+                    veiculos={veiculos}
+                    setVeiculos={setVeiculos}
+                    onDeleteVehicle={handleDeleteVehicle}
+                  />
+                )}
               </>
             )}
           </div>

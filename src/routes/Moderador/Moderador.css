@@ -53,3 +53,22 @@
   width: calc(100% - 240px);
   overflow-y: auto;
 }
+
+.logout-button {
+  background-color: #dc3545; /* Vermelho para o botão de sair */
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+  /* text-align: left; */
+  padding-left: 0;
+  padding-right: 0;
+  font-size: 1rem;
+  margin-top: 450px;
+}
+
+.logout-button:hover {
+  background-color: #c82333;
+}

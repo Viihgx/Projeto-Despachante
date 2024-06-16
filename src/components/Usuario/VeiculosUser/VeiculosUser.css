@@ -1,55 +1,60 @@
 .veiculos-user {
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.veiculos-user h2 {
-  color: #333;
-  margin-bottom: 20px;
-}
-
-.add-vehicle-form {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 20px;
-}
-
-.add-vehicle-form input {
-  padding: 10px;
-  margin-bottom: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
-
-.add-vehicle-form button {
-  padding: 10px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.add-vehicle-form button:hover {
-  background-color: #0056b3;
-}
-
-.vehicles-list h3 {
-  color: #333;
-  margin-bottom: 10px;
-}
-
-.vehicles-list ul {
-  list-style: none;
-  padding: 0;
-}
-
-.vehicles-list li {
-  padding: 10px;
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  margin-bottom: 10px;
-}
+    padding: 20px;
+  }
+  
+  .add-vehicle-form {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .add-vehicle-form input {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    flex: 1;
+  }
+  
+  .add-vehicle-form button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #111c55;
+    color: white;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  
+  .add-vehicle-form button:hover {
+    background-color: #0e1543;
+  }
+  
+  .vehicles-list {
+    margin-top: 20px;
+  }
+  
+  .vehicles-list ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .vehicles-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 10px;
+  }
+  
+  .delete-button {
+    background: none;
+    border: none;
+    color: #dc3545;
+    cursor: pointer;
+  }
+  
+  .delete-button:hover {
+    color: #a71d2a;
+  }
+  

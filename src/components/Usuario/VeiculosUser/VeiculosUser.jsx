@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './VeiculosUser.css';
+import { FaTrash } from 'react-icons/fa';
 
-function VeiculosUser({ veiculos, setVeiculos }) {
+function VeiculosUser({ veiculos, setVeiculos, onDeleteVehicle }) {
   const [newVehicle, setNewVehicle] = useState({ placa_veiculo: '', nome_veiculo: '' });
 
   const handleInputChange = (e) => {
@@ -53,9 +54,12 @@ function VeiculosUser({ veiculos, setVeiculos }) {
         <h3>Veículos Adicionados:</h3>
         {veiculos.length > 0 ? (
           <ul>
-            {veiculos.map((vehicle, index) => (
-              <li key={index}>
+            {veiculos.map((vehicle) => (
+              <li key={vehicle.id}>
                 {vehicle.placa_veiculo} - {vehicle.nome_veiculo}
+                <button className="delete-button" onClick={() => onDeleteVehicle(vehicle.id)}>
+                  <FaTrash />
+                </button>
               </li>
             ))}
           </ul>
